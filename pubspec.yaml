@@ -56,12 +56,23 @@ dependencies:
   lemmatizerx: ^1.0.0
   tflite_flutter_helper_plus: ^0.0.2
   responsive_framework: ^1.0.0
+  flutter_launcher_icons: ^0.11.0
   # sqlite3_flutter_libs: ^0.5.15
 
+flutter_icons:
+  #  image_path: "assets/images/icon-128x128.png"
+  image_path_android: "assets/icons/app_icon.png"
+  image_path_ios: "assets/icons/app_icon.png"
+  android: true # can specify file name here e.g. "ic_launcher"
+  ios: true # can specify file name here e.g. "My-Launcher-Icon"
+  min_sdk_android: 21 # android min sdk min:16, default 21
+  remove_alpha_ios: true
+  # background_color_ios: "#ffffff"
 
 dev_dependencies:
-  flutter_test:
-    sdk: flutter
+ 
+flutter_test:
+  sdk: flutter
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -115,3 +126,4 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+
