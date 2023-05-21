@@ -18,17 +18,17 @@ class RouteEntity {
 
   RouteEntity.loginScreen()
       : name = Routes.loginScreen,
-        view = LoginScreen();
+        view = const LoginScreen();
   RouteEntity.registerScreen()
       : name = Routes.registerScreen,
-        view = RegisterScreen();
+        view = const RegisterScreen();
   RouteEntity.onboardingScreen()
       : name = Routes.onboardingScreen,
-        view = OnboardingScreen();
+        view = const OnboardingScreen();
   // RouteEntity.homeScreen()
   //     : name = Routes.homeScreen,
   //       view = const HomeScreen();
   RouteEntity.homeScreen()
       : name = Routes.homeScreen,
-        view = BottomNavigationScreen();
+        view = const BottomNavigationScreen();
 }

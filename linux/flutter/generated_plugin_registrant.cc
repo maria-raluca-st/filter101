@@ -6,16 +6,12 @@
 
 #include "generated_plugin_registrant.h"
 
-#include <sqlite3_flutter_libs/sqlite3_flutter_libs_plugin.h>
 #include <tflite_flutter/tflite_flutter_plugin.h>
 #include <tflite_flutter_plus/tflite_flutter_plus_plugin.h>
 #include <url_launcher_linux/url_launcher_plugin.h>
 #include <window_to_front/window_to_front_plugin.h>
 
 void fl_register_plugins(FlPluginRegistry* registry) {
-  g_autoptr(FlPluginRegistrar) sqlite3_flutter_libs_registrar =
-      fl_plugin_registry_get_registrar_for_plugin(registry, "Sqlite3FlutterLibsPlugin");
-  sqlite3_flutter_libs_plugin_register_with_registrar(sqlite3_flutter_libs_registrar);
   g_autoptr(FlPluginRegistrar) tflite_flutter_registrar =
       fl_plugin_registry_get_registrar_for_plugin(registry, "TfliteFlutterPlugin");
   tflite_flutter_plugin_register_with_registrar(tflite_flutter_registrar);

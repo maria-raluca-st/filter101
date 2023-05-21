@@ -37,10 +37,10 @@ class StartState extends State<SplashScreen> {
       backgroundColor: Colors.white,
       body: SizedBox(
         height: MediaQuery.of(context).size.height,
-        child: Center(
+        child: const Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: const <Widget>[
+            children: <Widget>[
               // Spacer(),
               // Center(
               //   child: SvgWrapper(

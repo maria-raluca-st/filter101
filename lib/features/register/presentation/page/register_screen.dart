@@ -69,7 +69,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Register'),
+        title: const Text('Register'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -78,24 +78,24 @@ class _RegisterScreenState extends State<RegisterScreen> {
           children: [
             TextField(
               controller: _emailController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Email',
               ),
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             TextField(
               controller: _passwordController,
               obscureText: true,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Password',
               ),
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             ElevatedButton(
               onPressed: _signUp,
-              child: Text('Sign Up'),
+              child: const Text('Sign Up'),
             ),
-            SizedBox(height: 8.0),
+            const SizedBox(height: 8.0),
             ElevatedButton(
               onPressed: _signUpWithGoogle,
               child: Row(
@@ -105,15 +105,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     'assets/png/google_logo.png',
                     height: 24.0,
                   ),
-                  SizedBox(width: 8.0),
-                  Text('Sign Up with Google'),
+                  const SizedBox(width: 8.0),
+                  const Text('Sign Up with Google'),
                 ],
               ),
             ),
-            SizedBox(height: 8.0),
+            const SizedBox(height: 8.0),
             TextButton(
               onPressed: _navigateToLogin,
-              child: Text('Already have an account? Login'),
+              child: const Text('Already have an account? Login'),
             ),
           ],
         ),

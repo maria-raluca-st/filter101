@@ -4,6 +4,8 @@ import '../../../../coordinator.dart';
 import '../../../../routes.dart';
 
 class OnboardingScreen extends StatefulWidget {
+  const OnboardingScreen({super.key});
+
   @override
   _OnboardingScreenState createState() => _OnboardingScreenState();
 }
@@ -42,7 +44,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 itemBuilder: (context, index) {
                   final page = _pages[index];
                   return Container(
-                    padding: EdgeInsets.symmetric(horizontal: 24.0),
+                    padding: const EdgeInsets.symmetric(horizontal: 24.0),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -50,15 +52,15 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         //   page['image']!,
                         //   height: MediaQuery.of(context).size.height * 0.5,
                         // ),
-                        SizedBox(height: 48.0),
+                        const SizedBox(height: 48.0),
                         Text(
                           page['title']!,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 24.0,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        SizedBox(height: 16.0),
+                        const SizedBox(height: 16.0),
                         Text(
                           page['description']!,
                           textAlign: TextAlign.center,
@@ -75,7 +77,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               ),
             ),
             Container(
-              padding: EdgeInsets.all(24.0),
+              padding: const EdgeInsets.all(24.0),
               child: Column(
                 children: [
                   if (_currentPageIndex == _pages.length - 1)
@@ -83,10 +85,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       onPressed: () {
                         Coordinator.of(context).push(RouteEntity.homeScreen());
                       },
-                      child: Text('Get Started'),
                       style: ElevatedButton.styleFrom(
-                        primary: Colors.green,
+                        backgroundColor: Colors.green,
                       ),
+                      child: const Text('Get Started'),
                     ),
                   if (_currentPageIndex != _pages.length - 1)
                     OutlinedButton(
@@ -95,7 +97,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                           _currentPageIndex += 1;
                         });
                       },
-                      child: Text('Next'),
+                      child: const Text('Next'),
                     ),
                 ],
               ),

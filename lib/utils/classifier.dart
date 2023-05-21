@@ -528,16 +528,40 @@
 //   // }
 // }
 
+import 'dart:io';
+
+import 'package:flutter/services.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:tflite_flutter_helper_plus/tflite_flutter_helper_plus.dart';
 
 class Classifier {
-  Classifier() {}
+  Classifier();
 
   classify(String text) async {
     final classifier = await NLClassifier.createFromAsset(
-        'assets/final_model_cleaned.tflite',
+        // 'assets/humor_model.tflite',
+        // 'assets/model_hate_speech.tflite',
+        'assets/model_sarcasm.tflite',
+        // 'assets/text_classification_v2.tflite',
         options: NLClassifierOptions());
 
-    return classifier.classify(text);
+    var prediction = classifier.classify(text);
+    print(prediction[1].score);
+    print(prediction[0].score);
+  }
+
+  Future<File> getFile(String fileName) async {
+    final appDir = await getTemporaryDirectory();
+    final appPath = appDir.path;
+    final fileOnDevice = File('$appPath/$fileName');
+    final rawAssetFile = await rootBundle.load('assets/$fileName');
+    final rawBytes = rawAssetFile.buffer.asUint8List();
+    await fileOnDevice.writeAsBytes(rawBytes, flush: true);
+    return fileOnDevice;
+  }
+
+  Future<String> getPathOnDevice(String assetFileName) async {
+    final fileOnDevice = await getFile(assetFileName);
+    return fileOnDevice.path;
   }
 }

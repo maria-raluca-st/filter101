@@ -55,7 +55,8 @@ dependencies:
   tokenizer: ^1.0.0
   lemmatizerx: ^1.0.0
   tflite_flutter_helper_plus: ^0.0.2
-  sqlite3_flutter_libs: ^0.5.15
+  responsive_framework: ^1.0.0
+  # sqlite3_flutter_libs: ^0.5.15
 
 
 dev_dependencies:

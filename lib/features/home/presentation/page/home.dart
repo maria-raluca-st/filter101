@@ -338,17 +338,16 @@
 // }
 
 // --------------------------------------------------------------------------------
-import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:tflite_flutter/tflite_flutter.dart';
 
 import '../../../../data/post.dart';
 import '../../../../network/reddit_service.dart';
 import '../../../../utils/classifier.dart';
 
 class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+
   @override
   _HomePageState createState() => _HomePageState();
 }
@@ -389,7 +388,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Reddit Posts'),
+        title: const Text('Reddit Posts'),
       ),
       body: Column(
         children: [
@@ -402,7 +401,7 @@ class _HomePageState extends State<HomePage> {
                   print(subredditName);
                 });
               },
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Enter Subreddit Name',
                 border: OutlineInputBorder(),
               ),
@@ -410,9 +409,9 @@ class _HomePageState extends State<HomePage> {
           ),
           ElevatedButton(
             onPressed: fetchRedditPosts,
-            child: Text('Fetch Posts'),
+            child: const Text('Fetch Posts'),
           ),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           Expanded(
             child: ListView.builder(
               itemCount: posts.length,
@@ -422,8 +421,9 @@ class _HomePageState extends State<HomePage> {
                   title: Text(post.title),
                   subtitle: Text(post.selftext),
                   onTap: () {
-                    classifyPost(post.selftext);
-                    // classifyPost("I'm thinking of killing myself");
+                    classifyPost(post.title);
+                    // classifyPost(
+                    //     "They must be fucked in the head if they are black people.");
                     // navigateToPostDetails(post);
                   },
                 );

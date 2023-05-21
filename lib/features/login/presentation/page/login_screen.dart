@@ -1,4 +1,3 @@
-import 'package:filter101/constants/asset_paths.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -7,6 +6,8 @@ import '../../../../coordinator.dart';
 import '../../../../routes.dart';
 
 class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
+
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
@@ -71,7 +72,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Login'),
+        title: const Text('Login'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -80,24 +81,24 @@ class _LoginScreenState extends State<LoginScreen> {
           children: [
             TextField(
               controller: _emailController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Email',
               ),
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             TextField(
               controller: _passwordController,
               obscureText: true,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Password',
               ),
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             ElevatedButton(
               onPressed: _login,
-              child: Text('Login'),
+              child: const Text('Login'),
             ),
-            SizedBox(height: 8.0),
+            const SizedBox(height: 8.0),
             ElevatedButton(
               style: ButtonStyle(
                   backgroundColor:
@@ -111,15 +112,15 @@ class _LoginScreenState extends State<LoginScreen> {
                     'assets/png/google_logo.png',
                     height: 24.0,
                   ),
-                  SizedBox(width: 8.0),
-                  Text('Login with Google'),
+                  const SizedBox(width: 8.0),
+                  const Text('Login with Google'),
                 ],
               ),
             ),
-            SizedBox(height: 8.0),
+            const SizedBox(height: 8.0),
             TextButton(
               onPressed: _navigateToSignUp,
-              child: Text('Don\'t have an account? Sign up'),
+              child: const Text('Don\'t have an account? Sign up'),
             ),
           ],
         ),

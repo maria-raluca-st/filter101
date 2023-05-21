@@ -12,17 +12,17 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
   int _currentIndex = 0;
 
   final List<Widget> _tabs = [
-    HomeTab(),
-    FavoritesTab(),
-    InfoTab(),
-    ProfileTab(),
+    const HomeTab(),
+    const FavoritesTab(),
+    const InfoTab(),
+    const ProfileTab(),
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Bottom Navigation'),
+        title: const Text('Bottom Navigation'),
       ),
       body: _tabs[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
@@ -34,7 +34,7 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
             _currentIndex = index;
           });
         },
-        items: [
+        items: const [
           BottomNavigationBarItem(
             // backgroundColor: Colors.green,
             icon: Icon(
@@ -72,9 +72,11 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
 }
 
 class HomeTab extends StatelessWidget {
+  const HomeTab({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return HomePage();
+    return const HomePage();
     // Center(
     //   child: Text('Home Tab'),
     // );
@@ -82,27 +84,33 @@ class HomeTab extends StatelessWidget {
 }
 
 class FavoritesTab extends StatelessWidget {
+  const FavoritesTab({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return Center(
+    return const Center(
       child: Text('Favorites Tab'),
     );
   }
 }
 
 class InfoTab extends StatelessWidget {
+  const InfoTab({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return Center(
+    return const Center(
       child: Text('Info Tab'),
     );
   }
 }
 
 class ProfileTab extends StatelessWidget {
+  const ProfileTab({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return Center(
+    return const Center(
       child: Text('Profile Tab'),
     );
   }
