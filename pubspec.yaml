@@ -51,9 +51,6 @@ dependencies:
   http: ^0.13.6
   tflite_flutter: ^0.9.5
   tuple: ^2.0.1
-  stemmer: ^2.2.0
-  tokenizer: ^1.0.0
-  lemmatizerx: ^1.0.0
   tflite_flutter_helper_plus: ^0.0.2
   responsive_framework: ^1.0.0
   flutter_launcher_icons: ^0.11.0
@@ -101,22 +98,20 @@ flutter:
     - assets/png/
     - assets/
 
-  # An image asset can refer to one or more resolution-specific "variants", see
-  # https://flutter.dev/assets-and-images/#resolution-aware
 
-  # For details regarding adding assets from package dependencies, see
-  # https://flutter.dev/assets-and-images/#from-packages
-
-  # To add custom fonts to your application, add a fonts section here,
-  # in this "flutter" section. Each entry in this list should have a
-  # "family" key with the font family name, and a "fonts" key with a
-  # list giving the asset and other descriptors for the font. For
-  # example:
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
-  #       - asset: fonts/Schyler-Italic.ttf
+  fonts:
+    - family: Inconsolata
+      fonts:
+        - asset: assets/fonts/Inconsolata-Regular.ttf
+        - asset: assets/fonts/Inconsolata-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/Inconsolata-Black.ttf
+        - asset: assets/fonts/Inconsolata-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/Inconsolata-Medium.ttf
+        - asset: assets/fonts/Inconsolata-Light.ttf
+        - asset: assets/fonts/Inconsolata-ExtraLight.ttf
+        - asset: assets/fonts/Inconsolata-ExtraBold.ttf 
   #         style: italic
   #   - family: Trajan Pro
   #     fonts:
