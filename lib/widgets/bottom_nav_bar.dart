@@ -1,6 +1,8 @@
 import 'package:filter101/features/home/presentation/page/home.dart';
 import 'package:flutter/material.dart';
 
+import '../constants/colour.dart';
+
 class BottomNavigationScreen extends StatefulWidget {
   const BottomNavigationScreen({super.key});
 
@@ -21,12 +23,9 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Bottom Navigation'),
-      ),
       body: _tabs[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
-        selectedItemColor: Colors.black,
+        selectedItemColor: Colour.hunterGreen,
         // backgroundColor: Colors.green,
         currentIndex: _currentIndex,
         onTap: (index) {
@@ -39,7 +38,7 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
             // backgroundColor: Colors.green,
             icon: Icon(
               Icons.home,
-              color: Colors.black,
+              color: Colour.hunterGreen,
             ),
             label: 'Home',
           ),
@@ -47,21 +46,21 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
             // backgroundColor: Colors.green,
             icon: Icon(
               Icons.favorite,
-              color: Colors.black,
+              color: Colour.hunterGreen,
             ),
             label: 'Favorites',
           ),
           BottomNavigationBarItem(
             icon: Icon(
               Icons.info,
-              color: Colors.black,
+              color: Colour.hunterGreen,
             ),
             label: 'Info',
           ),
           BottomNavigationBarItem(
             icon: Icon(
               Icons.person,
-              color: Colors.black,
+              color: Colour.hunterGreen,
             ),
             label: 'Profile',
           ),

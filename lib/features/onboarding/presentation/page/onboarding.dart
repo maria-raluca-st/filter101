@@ -60,15 +60,15 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         Text(
                           page['title']!,
                           style: TextStyles.heading(
-                            fontSize: 24.0,
-                            fontWeight: FontWeight.bold,
-                          ),
+                              fontSize: 24.0,
+                              fontWeight: FontWeight.bold,
+                              color: Colour.hunterGreen),
                           textAlign: TextAlign.center,
                         ),
                         const SizedBox(height: 16.0),
                         Text(
                           page['description']!,
-                          style: TextStyles.body(),
+                          style: TextStyles.body(color: Colour.hunterGreen),
                           textAlign: TextAlign.center,
                         ),
                       ],

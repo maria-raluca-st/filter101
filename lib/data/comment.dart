@@ -5,7 +5,7 @@ class RedditComment {
 
   factory RedditComment.fromJson(Map<String, dynamic> json) {
     return RedditComment(
-      body: json['data']['body'],
+      body: json['body'],
     );
   }
 }
