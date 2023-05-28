@@ -140,14 +140,23 @@ class RedditService {
     try {
       final url = Uri.parse('https://www.reddit.com$permalink.json');
       final response = await http.get(url);
+      List<RedditComment> comments = [];
 
       if (response.statusCode == 200) {
         final jsonList = json.decode(response.body)[1]['data']['children'];
 
-        List<RedditComment> comments = jsonList
-            .map<RedditComment>((json) => RedditComment.fromJson(json))
-            .toList();
-
+        // List<RedditComment> comments = jsonList
+        //     .map<RedditComment>((json) => RedditComment.fromJson(json['data']))
+        //     .toList();
+        for (var json in jsonList) {
+          try {
+            final commentData = json['data'];
+            final comment = RedditComment.fromJson(commentData);
+            comments.add(comment);
+          } catch (e) {
+            print('Skipping comment due to incomplete data: $e');
+          }
+        }
         // if (comments.length > limit) {
         //   comments = comments.sublist(0, limit);
         // }

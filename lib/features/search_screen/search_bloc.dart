@@ -261,47 +261,60 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
   void classifyContent(String text, Map<String, int> categoryCounts) async {
     if (_selectedCategories['hateSpeech']!) {
       final prediction = await _classifier.classify(text, 'hate');
-      if (prediction[1].score > prediction[0].score) {
-        categoryCounts['hateSpeech'] = categoryCounts['hateSpeech']! + 1;
+      print(prediction);
+      if (prediction != null && prediction.length >= 2) {
+        if (prediction[1].score > prediction[0].score) {
+          categoryCounts['hateSpeech'] = categoryCounts['hateSpeech']! + 1;
+        }
       }
     }
 
     if (_selectedCategories['negativeContent']!) {
       final prediction = await _classifier.classify(text, 'emotion');
-      if (prediction[0].score > prediction[1].score) {
-        categoryCounts['negativeContent'] =
-            categoryCounts['negativeContent']! + 1;
+      if (prediction != null && prediction.length >= 2) {
+        if (prediction[0].score > prediction[1].score) {
+          categoryCounts['negativeContent'] =
+              categoryCounts['negativeContent']! + 1;
+        }
       }
     }
 
     if (_selectedCategories['humor']!) {
       final prediction = await _classifier.classify(text, 'humor');
-      if (prediction[1].score > prediction[0].score) {
-        categoryCounts['humor'] = categoryCounts['humor']! + 1;
+      if (prediction != null && prediction.length >= 2) {
+        if (prediction[1].score > prediction[0].score) {
+          categoryCounts['humor'] = categoryCounts['humor']! + 1;
+        }
       }
     }
 
     if (_selectedCategories['positiveContent']!) {
       final prediction = await _classifier.classify(text, 'emotion');
-      if (prediction[1].score > prediction[0].score) {
-        categoryCounts['positiveContent'] =
-            categoryCounts['positiveContent']! + 1;
+      if (prediction != null && prediction.length >= 2) {
+        if (prediction[1].score > prediction[0].score) {
+          categoryCounts['positiveContent'] =
+              categoryCounts['positiveContent']! + 1;
+        }
       }
     }
 
     if (_selectedCategories['sarcasmExcluding']!) {
       final prediction = await _classifier.classify(text, 'sarcasm');
-      if (prediction[0].score > prediction[1].score) {
-        categoryCounts['sarcasmExcluding'] =
-            categoryCounts['sarcasmExcluding']! + 1;
+      if (prediction != null && prediction.length >= 2) {
+        if (prediction[0].score > prediction[1].score) {
+          categoryCounts['sarcasmExcluding'] =
+              categoryCounts['sarcasmExcluding']! + 1;
+        }
       }
     }
 
     if (_selectedCategories['sarcasmIncluding']!) {
       final prediction = await _classifier.classify(text, 'sarcasm');
-      if (prediction[1].score > prediction[0].score) {
-        categoryCounts['sarcasmIncluding'] =
-            categoryCounts['sarcasmIncluding']! + 1;
+      if (prediction != null && prediction.length >= 2) {
+        if (prediction[1].score > prediction[0].score) {
+          categoryCounts['sarcasmIncluding'] =
+              categoryCounts['sarcasmIncluding']! + 1;
+        }
       }
     }
   }
