@@ -201,7 +201,7 @@ class SearchScreen extends StatelessWidget {
                       final post = posts[index];
                       return ListTile(
                         title: Text(post.title),
-                        subtitle: Text(post.subreddit),
+                        // subtitle: Text(post.subreddit),
                       );
                     },
                   ),

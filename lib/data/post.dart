@@ -17,10 +17,14 @@ class RedditPost {
 
   factory RedditPost.fromJson(Map<String, dynamic> json) {
     return RedditPost(
-      title: json['data']['title'],
-      subreddit: json['data']['subreddit'],
-      permalink: json['data']['permalink'],
-      selfText: json['data']['selftext'],
+      title: json['title'],
+      subreddit: json['subreddit'],
+      permalink: json['permalink'],
+      selfText: json['selftext'],
     );
+  }
+  @override
+  String toString() {
+    return 'RedditPost(title: $title, subreddit: $subreddit, permalink: $permalink, selfText: $selfText)';
   }
 }

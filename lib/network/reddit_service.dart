@@ -46,28 +46,84 @@ import '../data/comment.dart';
 import '../data/post.dart';
 
 class RedditService {
+  // static Future<List<RedditPost>> fetchPosts(
+  //     String subreddit, int limit) async {
+  //   try {
+  //     final url = Uri.parse('https://www.reddit.com/r/$subreddit.json');
+  //     final response = await http.get(url);
+
+  //     if (response.statusCode == 200) {
+  //       final jsonData = json.decode(response.body);
+  //       final jsonList = jsonData['data']['children'];
+
+  //       print(jsonData); // Print the received JSON response
+
+  //       List<RedditPost> posts = jsonList.map<RedditPost>((json) {
+  //         final postData = json['data'];
+  //         return RedditPost.fromJson(postData);
+  //       }).toList();
+
+  //       print('-------------------------------------------------------------');
+  //       print(posts);
+
+  //       if (posts.length > limit) {
+  //         posts = posts.sublist(0, limit);
+  //       }
+
+  //       return posts;
+  //     } else {
+  //       throw Exception('Failed to fetch posts: ${response.statusCode}');
+  //     }
+  //   } on SocketException {
+  //     throw Exception('Failed to connect to the host');
+  //   } catch (e) {
+  //     throw Exception('Failed to fetch posts: $e');
+  //   }
+  // }
+
   static Future<List<RedditPost>> fetchPosts(
       String subreddit, int limit) async {
     try {
       final url = Uri.parse('https://www.reddit.com/r/$subreddit.json');
       final response = await http.get(url);
+      List<RedditPost> posts = [];
+
+      print('Response status code: ${response.statusCode}');
+      print('Response body: ${response.body}');
 
       if (response.statusCode == 200) {
         final jsonData = json.decode(response.body);
-        final jsonList = jsonData['data']['children'];
 
-        print(jsonData); // Print the received JSON response
+        if (jsonData != null &&
+            jsonData['data'] != null &&
+            jsonData['data']['children'] != null) {
+          final jsonList = jsonData['data']['children'];
 
-        List<RedditPost> posts = jsonList.map<RedditPost>((json) {
-          final postData = json['data'];
-          return RedditPost.fromJson(postData);
-        }).toList();
+          for (var json in jsonList) {
+            try {
+              final postData = json['data'];
+              print('Data: $postData');
+              final title = postData['title'];
+              final selfText = postData['selftext'];
+              final permalink = postData['permalink'];
 
-        if (posts.length > limit) {
-          posts = posts.sublist(0, limit);
+              if ((title != null || selfText != null) && permalink != null) {
+                print(postData);
+                posts.add(RedditPost.fromJson(postData));
+              }
+            } catch (e) {
+              print('Skipping post due to incomplete data: $e');
+            }
+          }
+
+          // if (posts.length > limit) {
+          //   posts = posts.sublist(0, limit);
+          // }
+          print(
+              '-------------------------------------------------------------');
+          print(posts);
+          return posts;
         }
-
-        return posts;
       } else {
         throw Exception('Failed to fetch posts: ${response.statusCode}');
       }
@@ -76,6 +132,7 @@ class RedditService {
     } catch (e) {
       throw Exception('Failed to fetch posts: $e');
     }
+    return [];
   }
 
   static Future<List<RedditComment>> fetchComments(
@@ -91,9 +148,9 @@ class RedditService {
             .map<RedditComment>((json) => RedditComment.fromJson(json))
             .toList();
 
-        if (comments.length > limit) {
-          comments = comments.sublist(0, limit);
-        }
+        // if (comments.length > limit) {
+        //   comments = comments.sublist(0, limit);
+        // }
 
         return comments;
       } else {
