@@ -186,7 +186,8 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
 
   Future<void> _onEvent(SearchEvent event, Emitter<SearchState> emit) async {
     await event.when(
-      fetchData: (String subredditName) => _mapFetchDataEvent(subredditName),
+      fetchData: (String subredditName) =>
+          _mapFetchDataEvent(subredditName, emit),
       selectCategory: (String category, bool selected) =>
           _mapSelectCategoryEvent(category, selected, emit),
       changeSubreddit: (String subreddit) =>
@@ -194,11 +195,11 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     );
   }
 
-  Stream<SearchState> _mapFetchDataEvent(String subredditName) async* {
-    yield const SearchState.loading();
+  _mapFetchDataEvent(String subredditName, Emitter<SearchState> emit) async {
+    emit(SearchState.loading());
 
     if (subredditName.isEmpty) {
-      yield const SearchState.error();
+      emit(const SearchState.error());
       return;
     }
 
@@ -221,7 +222,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
       post.comments = comments;
 
       // Classify post
-      classifyContent(post.title, categoryCounts);
+      // classifyContent(post.selfText, categoryCounts);
 
       // Classify comments
       for (var comment in comments) {
@@ -234,22 +235,14 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     final Map<String, double> probabilities =
         calculateProbabilities(categoryCounts);
 
-    yield SearchState.loaded(
+    emit(SearchState.loaded(
       posts: processedPosts,
       probabilities: probabilities,
-    );
+    ));
   }
-
-  // _mapSelectCategoryEvent(String category, bool selected) {
-  //   _selectedCategories[category] = selected;
-  //   _mapFetchDataEvent(_subredditName ?? '');
-  //   add(SearchEvent.selectCategory(category: category, selected: selected));
-  // }
 
   _mapSelectCategoryEvent(
       String category, bool selected, Emitter<SearchState> emit) {
-    // final updatedCategories = Map<String, bool>.from(_selectedCategories);
-    // updatedCategories[category] = selected;
     _selectedCategories[category] = selected;
 
     emit(SearchState.loaded(

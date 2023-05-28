@@ -663,251 +663,271 @@ class _HomePageContentState extends State<_HomePageContent> {
   Widget build(BuildContext context) {
     final searchBloc = BlocProvider.of<SearchBloc>(context);
 
-    return Scaffold(
-      appBar: AppBar(
-        leading: SizedBox(),
-        title: const Text('Home'),
-        centerTitle: true,
-        elevation: 0,
-      ),
-      body: BlocBuilder<SearchBloc, SearchState>(
-        builder: (context, state) {
-          final subredditName = searchBloc.subredditName ?? '';
+    return BlocProvider.value(
+        value: searchBloc,
+        child: Scaffold(
+          appBar: AppBar(
+            leading: SizedBox(),
+            title: const Text('Home'),
+            centerTitle: true,
+            elevation: 0,
+          ),
+          body: BlocBuilder<SearchBloc, SearchState>(
+            builder: (context, state) {
+              var subredditName = searchBloc.subredditName ?? '';
 
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              const SizedBox(height: 60),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: Text(
-                  'Please choose a community to explore: ',
-                  style: const TextStyle(
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 30),
-              Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: TextField(
-                  controller: _subredditController,
-                  onChanged: (value) {
-                    print('Change Subreddit Event: $value');
-                    searchBloc.add(ChangeSubredditEvent(subreddit: value));
-                    print('Subreddit Name Home: ${searchBloc.subredditName}');
-                  },
-                  decoration: const InputDecoration(
-                    labelText: 'Enter Subreddit Name',
-                    border: OutlineInputBorder(),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 30),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
+                  const SizedBox(height: 60),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    child: const Text(
-                      'Excluding',
-                      style: TextStyle(
+                    child: Text(
+                      'Please choose a community to explore: ',
+                      style: const TextStyle(
                         fontSize: 18.0,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
-                  const SizedBox(height: 20.0),
+                  const SizedBox(height: 30),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 40.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        ElevatedButton(
-                          onPressed: () {
-                            setState(() {
-                              hateSpeechSelected = !hateSpeechSelected;
-                              searchBloc.add(
-                                SelectCategoryEvent(
-                                  category: 'hateSpeech',
-                                  selected: !hateSpeechSelected,
-                                ),
-                              );
-                            });
-                          },
-                          style: ElevatedButton.styleFrom(
-                            primary:
-                                hateSpeechSelected ? Colors.green : Colors.grey,
-                          ),
-                          child: const Text('Hate Speech'),
-                        ),
-                        const SizedBox(width: 20),
-                        ElevatedButton(
-                          onPressed: () {
-                            setState(() {
-                              negativeContentSelected =
-                                  !negativeContentSelected;
-                              searchBloc.add(
-                                SelectCategoryEvent(
-                                  category: 'negativeContent',
-                                  selected: !negativeContentSelected,
-                                ),
-                              );
-                            });
-                          },
-                          style: ElevatedButton.styleFrom(
-                            primary: negativeContentSelected
-                                ? Colors.green
-                                : Colors.grey,
-                          ),
-                          child: const Text('Negative Content'),
-                        ),
-                      ],
-                    ),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      setState(() {
-                        sarcasmExcludingSelected = !sarcasmExcludingSelected;
-                        searchBloc.add(
-                          SelectCategoryEvent(
-                            category: 'sarcasmExcluding',
-                            selected: !sarcasmExcludingSelected,
-                          ),
-                        );
-                      });
-                    },
-                    style: ElevatedButton.styleFrom(
-                      primary:
-                          sarcasmExcludingSelected ? Colors.green : Colors.grey,
-                    ),
-                    child: const Text('Sarcasm'),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 30.0),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    child: const Text(
-                      'Including',
-                      style: TextStyle(
-                        fontSize: 18.0,
-                        fontWeight: FontWeight.bold,
+                    padding: const EdgeInsets.all(10.0),
+                    child: TextField(
+                      controller: _subredditController,
+                      onChanged: (value) {
+                        print('Change Subreddit Event: $value');
+                        // searchBloc.add(ChangeSubredditEvent(subreddit: value));
+                        subredditName = value;
+                        print(
+                            'Subreddit Name Home: ${searchBloc.subredditName}');
+                      },
+                      decoration: const InputDecoration(
+                        labelText: 'Enter Subreddit Name',
+                        border: OutlineInputBorder(),
                       ),
                     ),
                   ),
-                  const SizedBox(height: 20.0),
+                  const SizedBox(height: 30),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        child: const Text(
+                          'Excluding',
+                          style: TextStyle(
+                            fontSize: 18.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 20.0),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 40.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            ElevatedButton(
+                              onPressed: () {
+                                setState(() {
+                                  hateSpeechSelected = !hateSpeechSelected;
+                                  searchBloc.add(
+                                    SelectCategoryEvent(
+                                      category: 'hateSpeech',
+                                      selected: !searchBloc
+                                          .selectedCategories['hateSpeech']!,
+                                    ),
+                                  );
+                                  print(searchBloc
+                                      .selectedCategories['hateSpeech']);
+                                });
+                              },
+                              style: ElevatedButton.styleFrom(
+                                primary: hateSpeechSelected
+                                    ? Colors.green
+                                    : Colors.grey,
+                              ),
+                              child: const Text('Hate Speech'),
+                            ),
+                            const SizedBox(width: 20),
+                            ElevatedButton(
+                              onPressed: () {
+                                setState(() {
+                                  negativeContentSelected =
+                                      !negativeContentSelected;
+                                  searchBloc.add(
+                                    SelectCategoryEvent(
+                                      category: 'negativeContent',
+                                      selected: !searchBloc.selectedCategories[
+                                          'negativeContent']!,
+                                    ),
+                                  );
+                                });
+                              },
+                              style: ElevatedButton.styleFrom(
+                                primary: negativeContentSelected
+                                    ? Colors.green
+                                    : Colors.grey,
+                              ),
+                              child: const Text('Negative Content'),
+                            ),
+                          ],
+                        ),
+                      ),
+                      ElevatedButton(
+                        onPressed: () {
+                          setState(() {
+                            sarcasmExcludingSelected =
+                                !sarcasmExcludingSelected;
+                            searchBloc.add(
+                              SelectCategoryEvent(
+                                category: 'sarcasmExcluding',
+                                selected: !searchBloc
+                                    .selectedCategories['sarcasmExcluding']!,
+                              ),
+                            );
+                          });
+                        },
+                        style: ElevatedButton.styleFrom(
+                          primary: sarcasmExcludingSelected
+                              ? Colors.green
+                              : Colors.grey,
+                        ),
+                        child: const Text('Sarcasm'),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 30.0),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        child: const Text(
+                          'Including',
+                          style: TextStyle(
+                            fontSize: 18.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 20.0),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            ElevatedButton(
+                              onPressed: () {
+                                setState(() {
+                                  humorSelected = !humorSelected;
+                                  searchBloc.add(
+                                    SelectCategoryEvent(
+                                      category: 'humor',
+                                      selected: !searchBloc
+                                          .selectedCategories['humor']!,
+                                    ),
+                                  );
+                                });
+                              },
+                              style: ElevatedButton.styleFrom(
+                                primary:
+                                    humorSelected ? Colors.green : Colors.grey,
+                              ),
+                              child: const Text('Humor'),
+                            ),
+                            const SizedBox(width: 16.0),
+                            ElevatedButton(
+                              onPressed: () {
+                                setState(() {
+                                  positiveContentSelected =
+                                      !positiveContentSelected;
+                                  searchBloc.add(
+                                    SelectCategoryEvent(
+                                      category: 'positiveContent',
+                                      selected: !searchBloc.selectedCategories[
+                                          'positiveContent']!,
+                                    ),
+                                  );
+                                  print(searchBloc
+                                      .selectedCategories['positiveContent']);
+                                });
+                              },
+                              style: ElevatedButton.styleFrom(
+                                primary: positiveContentSelected
+                                    ? Colors.green
+                                    : Colors.grey,
+                              ),
+                              child: const Text('Positive Content'),
+                            ),
+                            const SizedBox(width: 16.0),
+                            ElevatedButton(
+                              onPressed: () {
+                                setState(() {
+                                  sarcasmIncludingSelected =
+                                      !sarcasmIncludingSelected;
+                                  searchBloc.add(
+                                    SelectCategoryEvent(
+                                      category: 'sarcasmIncluding',
+                                      selected: !searchBloc.selectedCategories[
+                                          'sarcasmIncluding']!,
+                                    ),
+                                  );
+                                });
+                                // print('Sub Name: ${searchBloc.subredditName}');
+                                print(searchBloc
+                                    .selectedCategories['sarcasmIncluding']);
+                              },
+                              style: ElevatedButton.styleFrom(
+                                primary: sarcasmIncludingSelected
+                                    ? Colors.green
+                                    : Colors.grey,
+                              ),
+                              child: const Text('Sarcasm'),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 100),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        ElevatedButton(
-                          onPressed: () {
-                            setState(() {
-                              humorSelected = !humorSelected;
-                              searchBloc.add(
-                                SelectCategoryEvent(
-                                  category: 'humor',
-                                  selected: !humorSelected,
-                                ),
-                              );
-                            });
-                          },
-                          style: ElevatedButton.styleFrom(
-                            primary: humorSelected ? Colors.green : Colors.grey,
-                          ),
-                          child: const Text('Humor'),
+                    padding: const EdgeInsets.symmetric(horizontal: 80),
+                    child: SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.8,
+                      height: 50.0,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          print(
+                              'This sub name is searched : ${_subredditController.text} ');
+                          searchBloc.add(ChangeSubredditEvent(
+                              subreddit: _subredditController.text));
+
+                          searchBloc.add(SearchEvent.fetchData(subredditName));
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => SearchScreen(
+                                searchBloc: searchBloc,
+                              ),
+                            ),
+                          );
+                        },
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.green,
                         ),
-                        const SizedBox(width: 16.0),
-                        ElevatedButton(
-                          onPressed: () {
-                            setState(() {
-                              positiveContentSelected =
-                                  !positiveContentSelected;
-                              searchBloc.add(
-                                SelectCategoryEvent(
-                                  category: 'positiveContent',
-                                  selected: !positiveContentSelected,
-                                ),
-                              );
-                              print(searchBloc
-                                  .selectedCategories['positiveContent']);
-                            });
-                          },
-                          style: ElevatedButton.styleFrom(
-                            primary: positiveContentSelected
-                                ? Colors.green
-                                : Colors.grey,
-                          ),
-                          child: const Text('Positive Content'),
+                        child: const Text(
+                          'Search',
+                          style: TextStyle(color: Colors.white),
                         ),
-                        const SizedBox(width: 16.0),
-                        ElevatedButton(
-                          onPressed: () {
-                            setState(() {
-                              sarcasmIncludingSelected =
-                                  !sarcasmIncludingSelected;
-                              searchBloc.add(
-                                SelectCategoryEvent(
-                                  category: 'sarcasmIncluding',
-                                  selected: !sarcasmIncludingSelected,
-                                ),
-                              );
-                            });
-                            // print('Sub Name: ${searchBloc.subredditName}');
-                            print(searchBloc
-                                .selectedCategories['sarcasmIncluding']);
-                          },
-                          style: ElevatedButton.styleFrom(
-                            primary: sarcasmIncludingSelected
-                                ? Colors.green
-                                : Colors.grey,
-                          ),
-                          child: const Text('Sarcasm'),
-                        ),
-                      ],
+                      ),
                     ),
                   ),
                 ],
-              ),
-              const SizedBox(height: 100),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 80),
-                child: SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.8,
-                  height: 50.0,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      searchBloc.add(
-                          SearchEvent.fetchData(_subredditController.text));
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => SearchScreen(
-                            searchBloc: searchBloc,
-                          ),
-                        ),
-                      );
-                    },
-                    style: ElevatedButton.styleFrom(
-                      primary: Colors.green,
-                    ),
-                    child: const Text(
-                      'Search',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          );
-        },
-      ),
-    );
+              );
+            },
+          ),
+        ));
   }
 }

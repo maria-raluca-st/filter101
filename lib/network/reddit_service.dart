@@ -36,10 +36,11 @@
 // }
 
 // --------------------------------
+
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:http/io_client.dart';
+import 'package:http/http.dart' as http;
 
 import '../data/comment.dart';
 import '../data/post.dart';
@@ -49,48 +50,29 @@ class RedditService {
       String subreddit, int limit) async {
     try {
       final url = Uri.parse('https://www.reddit.com/r/$subreddit.json');
-      final client = HttpClient()
-        ..badCertificateCallback = (cert, host, port) => true;
-      final ioClient = IOClient(client);
+      final response = await http.get(url);
 
-      List<RedditPost> posts = [];
-      String? after;
+      if (response.statusCode == 200) {
+        final jsonData = json.decode(response.body);
+        final jsonList = jsonData['data']['children'];
 
-      while (posts.length < limit) {
-        try {
-          final response = await ioClient.get(
-            url.replace(queryParameters: {'limit': '100', 'after': after}),
-          );
+        print(jsonData); // Print the received JSON response
 
-          if (response.statusCode == 200) {
-            final jsonData = json.decode(response.body);
-            final jsonList = jsonData['data']['children'];
+        List<RedditPost> posts = jsonList.map<RedditPost>((json) {
+          final postData = json['data'];
+          return RedditPost.fromJson(postData);
+        }).toList();
 
-            List<RedditPost> fetchedPosts = jsonList.map<RedditPost>((json) {
-              final postData = json['data'];
-              return RedditPost.fromJson(postData);
-            }).toList();
-
-            posts.addAll(fetchedPosts);
-
-            if (jsonList.isNotEmpty) {
-              after = jsonData['data']['after'];
-            } else {
-              break;
-            }
-          } else {
-            throw Exception('Failed to fetch posts: ${response.statusCode}');
-          }
-        } on SocketException {
-          throw Exception('Failed to connect to the host');
+        if (posts.length > limit) {
+          posts = posts.sublist(0, limit);
         }
-      }
 
-      if (posts.length > limit) {
-        posts = posts.sublist(0, limit);
+        return posts;
+      } else {
+        throw Exception('Failed to fetch posts: ${response.statusCode}');
       }
-
-      return posts;
+    } on SocketException {
+      throw Exception('Failed to connect to the host');
     } catch (e) {
       throw Exception('Failed to fetch posts: $e');
     }
@@ -100,46 +82,25 @@ class RedditService {
       String permalink, int limit) async {
     try {
       final url = Uri.parse('https://www.reddit.com$permalink.json');
-      final client = HttpClient()
-        ..badCertificateCallback = (cert, host, port) => true;
-      final ioClient = IOClient(client);
+      final response = await http.get(url);
 
-      List<RedditComment> comments = [];
-      String? after;
+      if (response.statusCode == 200) {
+        final jsonList = json.decode(response.body)[1]['data']['children'];
 
-      while (comments.length < limit) {
-        try {
-          final response = await ioClient.get(
-            url.replace(queryParameters: {'limit': '100', 'after': after}),
-          );
+        List<RedditComment> comments = jsonList
+            .map<RedditComment>((json) => RedditComment.fromJson(json))
+            .toList();
 
-          if (response.statusCode == 200) {
-            final jsonList = json.decode(response.body)[1]['data']['children'];
-
-            List<RedditComment> fetchedComments = jsonList
-                .map<RedditComment>((json) => RedditComment.fromJson(json))
-                .toList();
-
-            comments.addAll(fetchedComments);
-
-            if (jsonList.isNotEmpty) {
-              after = jsonList.last['data']['name'];
-            } else {
-              break;
-            }
-          } else {
-            throw Exception('Failed to fetch comments: ${response.statusCode}');
-          }
-        } on SocketException {
-          throw Exception('Failed to connect to the host');
+        if (comments.length > limit) {
+          comments = comments.sublist(0, limit);
         }
-      }
 
-      if (comments.length > limit) {
-        comments = comments.sublist(0, limit);
+        return comments;
+      } else {
+        throw Exception('Failed to fetch comments: ${response.statusCode}');
       }
-
-      return comments;
+    } on SocketException {
+      throw Exception('Failed to connect to the host');
     } catch (e) {
       throw Exception('Failed to fetch comments: $e');
     }

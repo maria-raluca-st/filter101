@@ -138,17 +138,6 @@ class SearchScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Print category boolean values
-    print('Hate Speech: ${searchBloc.selectedCategories['hateSpeech']}');
-    print(
-        'Negative Content: ${searchBloc.selectedCategories['negativeContent']}');
-    print(
-        'Sarcasm excluding: ${searchBloc.selectedCategories['sarcasmExcluding']}');
-    print(
-        'Sarcasm Including: ${searchBloc.selectedCategories['sarcasmIncluding']}');
-    print('Subreddit Name: ${searchBloc.subredditName}');
-    // Print scores for other categories here
-
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -170,10 +159,26 @@ class SearchScreen extends StatelessWidget {
             final posts = state.posts;
 
             // Print obtained probabilities
-            print(
-                'Hate Speech Score: ${probabilities!['hateSpeechProbability']!.toStringAsFixed(2)}');
+            // if (probabilities!.containsKey('hateSpeechProbability'))
+            //   print(
+            //       'Hate Speech Score: ${probabilities!['hateSpeechProbability']!.toStringAsFixed(2)}');
             // Print scores for other categories here
-
+            // Display category values here
+            print(
+              'Hate Speech: ${searchBloc.selectedCategories['hateSpeech']}',
+            );
+            print(
+              'Negative Content: ${searchBloc.selectedCategories['negativeContent']}',
+            );
+            print(
+              'Sarcasm Excluding: ${searchBloc.selectedCategories['sarcasmExcluding']}',
+            );
+            print(
+              'Sarcasm Including: ${searchBloc.selectedCategories['sarcasmIncluding']}',
+            );
+            print(
+              'Subreddit Name: ${searchBloc.subredditName}',
+            );
             return Column(
               children: [
                 Column(
