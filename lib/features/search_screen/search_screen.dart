@@ -183,9 +183,9 @@ class SearchScreen extends StatelessWidget {
               children: [
                 Column(
                   children: [
-                    if (probabilities!.containsKey('hateSpeechProbability'))
+                    if (probabilities!.containsKey('hateSpeech'))
                       Text(
-                        'Hate Speech Score: ${probabilities['hateSpeechProbability']!.toStringAsFixed(2)}',
+                        'Hate Speech Score: ${probabilities['hateSpeech']!.toStringAsFixed(2)}',
                         style: TextStyle(color: Colors.black),
                         textAlign: TextAlign.center,
                       ),

@@ -170,6 +170,22 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     'sarcasmExcluding': false,
     'sarcasmIncluding': false,
   };
+  final Map<String, int> categoryCounts = {
+    'hateSpeech': 0,
+    'negativeContent': 0,
+    'humor': 0,
+    'positiveContent': 0,
+    'sarcasmExcluding': 0,
+    'sarcasmIncluding': 0,
+  };
+  final Map<String, int> predictedTextsTotal = {
+    'hateSpeech': 0,
+    'negativeContent': 0,
+    'humor': 0,
+    'positiveContent': 0,
+    'sarcasmExcluding': 0,
+    'sarcasmIncluding': 0,
+  };
 
   SearchBloc()
       : _classifier = Classifier(),
@@ -207,14 +223,6 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
         await RedditService.fetchPosts(subredditName, 10);
 
     final List<RedditPost> processedPosts = [];
-    final Map<String, int> categoryCounts = {
-      'hateSpeech': 0,
-      'negativeContent': 0,
-      'humor': 0,
-      'positiveContent': 0,
-      'sarcasmExcluding': 0,
-      'sarcasmIncluding': 0,
-    };
 
     for (var post in fetchedPosts) {
       final List<RedditComment> comments =
@@ -263,58 +271,74 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
       final prediction = await _classifier.classify(text, 'hate');
       print(prediction);
       if (prediction != null && prediction.length >= 2) {
-        if (prediction[1].score > prediction[0].score) {
+        if (prediction[0].score > prediction[1].score) {
           categoryCounts['hateSpeech'] = categoryCounts['hateSpeech']! + 1;
         }
+        predictedTextsTotal['hateSpeech'] =
+            predictedTextsTotal['hateSpeech']! + 1;
       }
     }
 
     if (_selectedCategories['negativeContent']!) {
       final prediction = await _classifier.classify(text, 'emotion');
+      print(prediction);
       if (prediction != null && prediction.length >= 2) {
         if (prediction[0].score > prediction[1].score) {
           categoryCounts['negativeContent'] =
               categoryCounts['negativeContent']! + 1;
         }
+        predictedTextsTotal['negativeContent'] =
+            predictedTextsTotal['negativeContent']! + 1;
       }
     }
 
     if (_selectedCategories['humor']!) {
       final prediction = await _classifier.classify(text, 'humor');
+      print(prediction);
       if (prediction != null && prediction.length >= 2) {
         if (prediction[1].score > prediction[0].score) {
           categoryCounts['humor'] = categoryCounts['humor']! + 1;
         }
+        predictedTextsTotal['humor'] = predictedTextsTotal['humor']! + 1;
       }
     }
 
     if (_selectedCategories['positiveContent']!) {
       final prediction = await _classifier.classify(text, 'emotion');
+      print(prediction);
       if (prediction != null && prediction.length >= 2) {
         if (prediction[1].score > prediction[0].score) {
           categoryCounts['positiveContent'] =
               categoryCounts['positiveContent']! + 1;
         }
+        predictedTextsTotal['positiveContent'] =
+            predictedTextsTotal['positiveContent']! + 1;
       }
     }
 
     if (_selectedCategories['sarcasmExcluding']!) {
       final prediction = await _classifier.classify(text, 'sarcasm');
+      print(prediction);
       if (prediction != null && prediction.length >= 2) {
         if (prediction[0].score > prediction[1].score) {
           categoryCounts['sarcasmExcluding'] =
               categoryCounts['sarcasmExcluding']! + 1;
         }
+        predictedTextsTotal['sarcasmExcluding'] =
+            predictedTextsTotal['sarcasmExcluding']! + 1;
       }
     }
 
     if (_selectedCategories['sarcasmIncluding']!) {
       final prediction = await _classifier.classify(text, 'sarcasm');
+      print(prediction);
       if (prediction != null && prediction.length >= 2) {
         if (prediction[1].score > prediction[0].score) {
           categoryCounts['sarcasmIncluding'] =
               categoryCounts['sarcasmIncluding']! + 1;
         }
+        predictedTextsTotal['sarcasmIncluding'] =
+            predictedTextsTotal['sarcasmIncluding']! + 1;
       }
     }
   }
@@ -322,11 +346,15 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
   Map<String, double> calculateProbabilities(Map<String, int> categoryCounts) {
     final Map<String, double> probabilities = {};
 
-    int totalTexts = categoryCounts.values.reduce((sum, count) => sum + count);
+    // int totalTexts = categoryCounts.values.reduce((sum, count) => sum + count);
 
     for (var entry in categoryCounts.entries) {
-      double probability = entry.value / totalTexts;
-      probabilities[entry.key] = probability;
+      String category = entry.key;
+      int count = entry.value;
+      int totalTexts = predictedTextsTotal[category] ?? 0;
+
+      double probability = count.toDouble() / totalTexts.toDouble();
+      probabilities[category] = probability;
     }
 
     return probabilities;
