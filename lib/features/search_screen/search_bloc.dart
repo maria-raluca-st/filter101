@@ -140,6 +140,11 @@
 // }
 
 // ----------------------------------
+
+// SearchBloc(this._classifier) : super(const SearchState.initial()) {
+//   on<SearchEvent>(_onEvent);
+// }
+
 import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:filter101/data/comment.dart';
@@ -168,37 +173,37 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
 
   SearchBloc()
       : _classifier = Classifier(),
-        super(const SearchState.initial()) {}
+        super(const SearchState.initial()) {
+    on<SearchEvent>(_onEvent);
+  }
 
   String? get subredditName => _subredditName;
+  Map<String, bool> get selectedCategories => Map.from(_selectedCategories);
 
-  set subredditName(String? value) {
-    _subredditName = value;
-    add(FetchDataEvent(value!));
+  void changeSubreddit(String subreddit) {
+    add(SearchEvent.changeSubreddit(subreddit: subreddit));
   }
 
-  @override
-  Stream<SearchState> onEvent(SearchEvent event) async* {
-    super.onEvent(event);
-    if (event is FetchDataEvent) {
-      yield* _mapFetchDataEventToState(event);
-    } else if (event is SelectCategoryEvent) {
-      yield* _mapSelectCategoryEventToState(event);
-    } else if (event is ChangeSubredditEvent) {
-      yield* _mapChangeSubredditEventToState(event);
-    }
+  Future<void> _onEvent(SearchEvent event, Emitter<SearchState> emit) async {
+    await event.when(
+      fetchData: (String subredditName) => _mapFetchDataEvent(subredditName),
+      selectCategory: (String category, bool selected) =>
+          _mapSelectCategoryEvent(category, selected, emit),
+      changeSubreddit: (String subreddit) =>
+          _mapChangeSubredditEvent(subreddit),
+    );
   }
 
-  Stream<SearchState> _mapFetchDataEventToState(FetchDataEvent event) async* {
+  Stream<SearchState> _mapFetchDataEvent(String subredditName) async* {
     yield const SearchState.loading();
 
-    if (_subredditName == null) {
+    if (subredditName.isEmpty) {
       yield const SearchState.error();
       return;
     }
 
     final List<RedditPost> fetchedPosts =
-        await RedditService.fetchPosts(_subredditName!, 10);
+        await RedditService.fetchPosts(subredditName, 10);
 
     final List<RedditPost> processedPosts = [];
     final Map<String, int> categoryCounts = {
@@ -235,22 +240,29 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     );
   }
 
-  Stream<SearchState> _mapSelectCategoryEventToState(
-      SelectCategoryEvent event) async* {
-    _selectedCategories[event.category] = event.selected;
-    yield* _fetchData();
+  // _mapSelectCategoryEvent(String category, bool selected) {
+  //   _selectedCategories[category] = selected;
+  //   _mapFetchDataEvent(_subredditName ?? '');
+  //   add(SearchEvent.selectCategory(category: category, selected: selected));
+  // }
+
+  _mapSelectCategoryEvent(
+      String category, bool selected, Emitter<SearchState> emit) {
+    // final updatedCategories = Map<String, bool>.from(_selectedCategories);
+    // updatedCategories[category] = selected;
+    _selectedCategories[category] = selected;
+
+    emit(SearchState.loaded(
+      selectedCategories: _selectedCategories,
+    ));
+    // add(SearchEvent.selectCategory(category: category, selected: selected));
   }
 
-  Stream<SearchState> _mapChangeSubredditEventToState(
-      ChangeSubredditEvent event) async* {
-    _subredditName = event.subreddit;
-    yield* _fetchData();
-  }
+  _mapChangeSubredditEvent(String subreddit) {
+    _subredditName = subreddit;
+    print('Subreddit Name bloc: $_subredditName');
 
-  Stream<SearchState> _fetchData() async* {
-    if (_subredditName != null) {
-      add(FetchDataEvent(_subredditName!));
-    }
+    add(SearchEvent.fetchData(_subredditName!));
   }
 
   void classifyContent(String text, Map<String, int> categoryCounts) async {
@@ -262,36 +274,54 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     }
 
     if (_selectedCategories['negativeContent']!) {
-      // Classify for negative content
-      // ...
+      final prediction = await _classifier.classify(text, 'emotion');
+      if (prediction[0].score > prediction[1].score) {
+        categoryCounts['negativeContent'] =
+            categoryCounts['negativeContent']! + 1;
+      }
     }
 
     if (_selectedCategories['humor']!) {
-      // Classify for humor
-      // ...
+      final prediction = await _classifier.classify(text, 'humor');
+      if (prediction[1].score > prediction[0].score) {
+        categoryCounts['humor'] = categoryCounts['humor']! + 1;
+      }
     }
 
     if (_selectedCategories['positiveContent']!) {
-      // Classify for positive content
-      // ...
+      final prediction = await _classifier.classify(text, 'emotion');
+      if (prediction[1].score > prediction[0].score) {
+        categoryCounts['positiveContent'] =
+            categoryCounts['positiveContent']! + 1;
+      }
     }
 
     if (_selectedCategories['sarcasmExcluding']!) {
-      // Classify for sarcasm excluding
-      // ...
+      final prediction = await _classifier.classify(text, 'sarcasm');
+      if (prediction[0].score > prediction[1].score) {
+        categoryCounts['sarcasmExcluding'] =
+            categoryCounts['sarcasmExcluding']! + 1;
+      }
     }
 
     if (_selectedCategories['sarcasmIncluding']!) {
-      // Classify for sarcasm including
-      // ...
+      final prediction = await _classifier.classify(text, 'sarcasm');
+      if (prediction[1].score > prediction[0].score) {
+        categoryCounts['sarcasmIncluding'] =
+            categoryCounts['sarcasmIncluding']! + 1;
+      }
     }
   }
 
   Map<String, double> calculateProbabilities(Map<String, int> categoryCounts) {
     final Map<String, double> probabilities = {};
 
-    // Calculate probabilities based on categoryCounts
-    // ...
+    int totalTexts = categoryCounts.values.reduce((sum, count) => sum + count);
+
+    for (var entry in categoryCounts.entries) {
+      double probability = entry.value / totalTexts;
+      probabilities[entry.key] = probability;
+    }
 
     return probabilities;
   }

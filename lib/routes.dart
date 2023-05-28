@@ -34,8 +34,14 @@ class RouteEntity {
   RouteEntity.homeScreen()
       : name = Routes.homeScreen,
         view = const BottomNavigationScreen();
-
-  RouteEntity.searchPage({required SearchBloc searchBloc})
-      : name = Routes.searchScreen,
-        view = SearchScreen();
+  // RouteEntity.searchPage({required SearchBloc searchBloc})
+  //     : name = Routes.searchScreen,
+  //       view = SearchScreen(searchBloc: searchBloc);
+  factory RouteEntity.searchPage({required SearchBloc searchBloc}) {
+    return RouteEntity(
+      name: Routes.searchScreen,
+      view: SearchScreen(searchBloc: searchBloc),
+    );
+  }
+  RouteEntity({required this.name, required this.view});
 }

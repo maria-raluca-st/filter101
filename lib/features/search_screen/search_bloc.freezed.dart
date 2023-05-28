@@ -522,7 +522,9 @@ mixin _$SearchState {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(
-            List<RedditPost> posts, Map<String, double> probabilities)
+            List<RedditPost>? posts,
+            Map<String, double>? probabilities,
+            Map<String, bool>? selectedCategories)
         loaded,
     required TResult Function() error,
   }) =>
@@ -532,7 +534,9 @@ mixin _$SearchState {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(
-            List<RedditPost> posts, Map<String, double> probabilities)?
+            List<RedditPost>? posts,
+            Map<String, double>? probabilities,
+            Map<String, bool>? selectedCategories)?
         loaded,
     TResult? Function()? error,
   }) =>
@@ -541,7 +545,10 @@ mixin _$SearchState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<RedditPost> posts, Map<String, double> probabilities)?
+    TResult Function(
+            List<RedditPost>? posts,
+            Map<String, double>? probabilities,
+            Map<String, bool>? selectedCategories)?
         loaded,
     TResult Function()? error,
     required TResult orElse(),
@@ -633,7 +640,9 @@ class _$InitialSearchState implements InitialSearchState {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(
-            List<RedditPost> posts, Map<String, double> probabilities)
+            List<RedditPost>? posts,
+            Map<String, double>? probabilities,
+            Map<String, bool>? selectedCategories)
         loaded,
     required TResult Function() error,
   }) {
@@ -646,7 +655,9 @@ class _$InitialSearchState implements InitialSearchState {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(
-            List<RedditPost> posts, Map<String, double> probabilities)?
+            List<RedditPost>? posts,
+            Map<String, double>? probabilities,
+            Map<String, bool>? selectedCategories)?
         loaded,
     TResult? Function()? error,
   }) {
@@ -658,7 +669,10 @@ class _$InitialSearchState implements InitialSearchState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<RedditPost> posts, Map<String, double> probabilities)?
+    TResult Function(
+            List<RedditPost>? posts,
+            Map<String, double>? probabilities,
+            Map<String, bool>? selectedCategories)?
         loaded,
     TResult Function()? error,
     required TResult orElse(),
@@ -752,7 +766,9 @@ class _$SearchLoadingState implements SearchLoadingState {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(
-            List<RedditPost> posts, Map<String, double> probabilities)
+            List<RedditPost>? posts,
+            Map<String, double>? probabilities,
+            Map<String, bool>? selectedCategories)
         loaded,
     required TResult Function() error,
   }) {
@@ -765,7 +781,9 @@ class _$SearchLoadingState implements SearchLoadingState {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(
-            List<RedditPost> posts, Map<String, double> probabilities)?
+            List<RedditPost>? posts,
+            Map<String, double>? probabilities,
+            Map<String, bool>? selectedCategories)?
         loaded,
     TResult? Function()? error,
   }) {
@@ -777,7 +795,10 @@ class _$SearchLoadingState implements SearchLoadingState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<RedditPost> posts, Map<String, double> probabilities)?
+    TResult Function(
+            List<RedditPost>? posts,
+            Map<String, double>? probabilities,
+            Map<String, bool>? selectedCategories)?
         loaded,
     TResult Function()? error,
     required TResult orElse(),
@@ -836,7 +857,10 @@ abstract class _$$SearchLoadedStateCopyWith<$Res> {
           _$SearchLoadedState value, $Res Function(_$SearchLoadedState) then) =
       __$$SearchLoadedStateCopyWithImpl<$Res>;
   @useResult
-  $Res call({List<RedditPost> posts, Map<String, double> probabilities});
+  $Res call(
+      {List<RedditPost>? posts,
+      Map<String, double>? probabilities,
+      Map<String, bool>? selectedCategories});
 }
 
 /// @nodoc
@@ -850,18 +874,23 @@ class __$$SearchLoadedStateCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? posts = null,
-    Object? probabilities = null,
+    Object? posts = freezed,
+    Object? probabilities = freezed,
+    Object? selectedCategories = freezed,
   }) {
     return _then(_$SearchLoadedState(
-      posts: null == posts
+      posts: freezed == posts
           ? _value._posts
           : posts // ignore: cast_nullable_to_non_nullable
-              as List<RedditPost>,
-      probabilities: null == probabilities
+              as List<RedditPost>?,
+      probabilities: freezed == probabilities
           ? _value._probabilities
           : probabilities // ignore: cast_nullable_to_non_nullable
-              as Map<String, double>,
+              as Map<String, double>?,
+      selectedCategories: freezed == selectedCategories
+          ? _value._selectedCategories
+          : selectedCategories // ignore: cast_nullable_to_non_nullable
+              as Map<String, bool>?,
     ));
   }
 }
@@ -870,30 +899,47 @@ class __$$SearchLoadedStateCopyWithImpl<$Res>
 
 class _$SearchLoadedState implements SearchLoadedState {
   const _$SearchLoadedState(
-      {required final List<RedditPost> posts,
-      required final Map<String, double> probabilities})
+      {final List<RedditPost>? posts,
+      final Map<String, double>? probabilities,
+      final Map<String, bool>? selectedCategories})
       : _posts = posts,
-        _probabilities = probabilities;
+        _probabilities = probabilities,
+        _selectedCategories = selectedCategories;
 
-  final List<RedditPost> _posts;
+  final List<RedditPost>? _posts;
   @override
-  List<RedditPost> get posts {
+  List<RedditPost>? get posts {
+    final value = _posts;
+    if (value == null) return null;
     if (_posts is EqualUnmodifiableListView) return _posts;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_posts);
+    return EqualUnmodifiableListView(value);
   }
 
-  final Map<String, double> _probabilities;
+  final Map<String, double>? _probabilities;
   @override
-  Map<String, double> get probabilities {
+  Map<String, double>? get probabilities {
+    final value = _probabilities;
+    if (value == null) return null;
     if (_probabilities is EqualUnmodifiableMapView) return _probabilities;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableMapView(_probabilities);
+    return EqualUnmodifiableMapView(value);
+  }
+
+  final Map<String, bool>? _selectedCategories;
+  @override
+  Map<String, bool>? get selectedCategories {
+    final value = _selectedCategories;
+    if (value == null) return null;
+    if (_selectedCategories is EqualUnmodifiableMapView)
+      return _selectedCategories;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableMapView(value);
   }
 
   @override
   String toString() {
-    return 'SearchState.loaded(posts: $posts, probabilities: $probabilities)';
+    return 'SearchState.loaded(posts: $posts, probabilities: $probabilities, selectedCategories: $selectedCategories)';
   }
 
   @override
@@ -903,14 +949,17 @@ class _$SearchLoadedState implements SearchLoadedState {
             other is _$SearchLoadedState &&
             const DeepCollectionEquality().equals(other._posts, _posts) &&
             const DeepCollectionEquality()
-                .equals(other._probabilities, _probabilities));
+                .equals(other._probabilities, _probabilities) &&
+            const DeepCollectionEquality()
+                .equals(other._selectedCategories, _selectedCategories));
   }
 
   @override
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(_posts),
-      const DeepCollectionEquality().hash(_probabilities));
+      const DeepCollectionEquality().hash(_probabilities),
+      const DeepCollectionEquality().hash(_selectedCategories));
 
   @JsonKey(ignore: true)
   @override
@@ -924,11 +973,13 @@ class _$SearchLoadedState implements SearchLoadedState {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(
-            List<RedditPost> posts, Map<String, double> probabilities)
+            List<RedditPost>? posts,
+            Map<String, double>? probabilities,
+            Map<String, bool>? selectedCategories)
         loaded,
     required TResult Function() error,
   }) {
-    return loaded(posts, probabilities);
+    return loaded(posts, probabilities, selectedCategories);
   }
 
   @override
@@ -937,11 +988,13 @@ class _$SearchLoadedState implements SearchLoadedState {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(
-            List<RedditPost> posts, Map<String, double> probabilities)?
+            List<RedditPost>? posts,
+            Map<String, double>? probabilities,
+            Map<String, bool>? selectedCategories)?
         loaded,
     TResult? Function()? error,
   }) {
-    return loaded?.call(posts, probabilities);
+    return loaded?.call(posts, probabilities, selectedCategories);
   }
 
   @override
@@ -949,13 +1002,16 @@ class _$SearchLoadedState implements SearchLoadedState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<RedditPost> posts, Map<String, double> probabilities)?
+    TResult Function(
+            List<RedditPost>? posts,
+            Map<String, double>? probabilities,
+            Map<String, bool>? selectedCategories)?
         loaded,
     TResult Function()? error,
     required TResult orElse(),
   }) {
     if (loaded != null) {
-      return loaded(posts, probabilities);
+      return loaded(posts, probabilities, selectedCategories);
     }
     return orElse();
   }
@@ -1000,11 +1056,13 @@ class _$SearchLoadedState implements SearchLoadedState {
 
 abstract class SearchLoadedState implements SearchState {
   const factory SearchLoadedState(
-      {required final List<RedditPost> posts,
-      required final Map<String, double> probabilities}) = _$SearchLoadedState;
+      {final List<RedditPost>? posts,
+      final Map<String, double>? probabilities,
+      final Map<String, bool>? selectedCategories}) = _$SearchLoadedState;
 
-  List<RedditPost> get posts;
-  Map<String, double> get probabilities;
+  List<RedditPost>? get posts;
+  Map<String, double>? get probabilities;
+  Map<String, bool>? get selectedCategories;
   @JsonKey(ignore: true)
   _$$SearchLoadedStateCopyWith<_$SearchLoadedState> get copyWith =>
       throw _privateConstructorUsedError;
@@ -1051,7 +1109,9 @@ class _$SearchErrorState implements SearchErrorState {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(
-            List<RedditPost> posts, Map<String, double> probabilities)
+            List<RedditPost>? posts,
+            Map<String, double>? probabilities,
+            Map<String, bool>? selectedCategories)
         loaded,
     required TResult Function() error,
   }) {
@@ -1064,7 +1124,9 @@ class _$SearchErrorState implements SearchErrorState {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(
-            List<RedditPost> posts, Map<String, double> probabilities)?
+            List<RedditPost>? posts,
+            Map<String, double>? probabilities,
+            Map<String, bool>? selectedCategories)?
         loaded,
     TResult? Function()? error,
   }) {
@@ -1076,7 +1138,10 @@ class _$SearchErrorState implements SearchErrorState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<RedditPost> posts, Map<String, double> probabilities)?
+    TResult Function(
+            List<RedditPost>? posts,
+            Map<String, double>? probabilities,
+            Map<String, bool>? selectedCategories)?
         loaded,
     TResult Function()? error,
     required TResult orElse(),
