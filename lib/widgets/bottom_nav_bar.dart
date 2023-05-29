@@ -76,9 +76,6 @@ class HomeTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const HomePage();
-    // Center(
-    //   child: Text('Home Tab'),
-    // );
   }
 }
 

@@ -1,132 +1,6 @@
-// import 'package:flutter/material.dart';
-// import 'package:flutter_bloc/flutter_bloc.dart';
-// import 'search_bloc.dart';
-
-// class SearchScreen extends StatelessWidget {
-//   final SearchBloc searchBloc;
-
-//   const SearchScreen({required this.searchBloc});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Text(
-//           'Search',
-//           style: TextStyle(
-//             color: Colors.white,
-//             fontSize: 24.0,
-//             fontWeight: FontWeight.bold,
-//           ),
-//         ),
-//       ),
-//       body: BlocBuilder<SearchBloc, SearchState>(
-//         bloc: searchBloc,
-//         builder: (context, state) {
-//           if (state is SearchLoadingState) {
-//             return Center(child: CircularProgressIndicator());
-//           } else if (state is SearchLoadedState) {
-//             final probabilities = state.probabilities;
-//             final posts = state.posts;
-
-//             return Column(
-//               children: [
-//                 Column(
-//                   children: [
-//                     if (probabilities.containsKey('hateSpeechProbability'))
-//                       Text(
-//                         'Hate Speech Score: ${probabilities['hateSpeechProbability']!.toStringAsFixed(2)}',
-//                         style: TextStyle(color: Colors.black),
-//                         textAlign: TextAlign.center,
-//                       ),
-//                     // Display scores for other categories here
-
-//                     SizedBox(height: 20),
-//                   ],
-//                 ),
-//                 Expanded(
-//                   child: ListView.builder(
-//                     itemCount: posts.length,
-//                     itemBuilder: (context, index) {
-//                       final post = posts[index];
-//                       return ListTile(
-//                         title: Text(post.title),
-//                         subtitle: Text(post.subreddit),
-//                       );
-//                     },
-//                   ),
-//                 ),
-//               ],
-//             );
-//           } else if (state is SearchErrorState) {
-//             return Center(
-//               child: Text(
-//                 'An error occurred while fetching data.',
-//                 style: TextStyle(color: Colors.red),
-//               ),
-//             );
-//           } else {
-//             return Container();
-//           }
-//         },
-//       ),
-//     );
-//   }
-// }
-// // -----------------------------------
-// // import 'package:flutter/material.dart';
-// // import 'package:flutter_bloc/flutter_bloc.dart';
-
-// // import 'search_bloc.dart';
-
-// // class SearchScreen extends StatelessWidget {
-// //   final SearchBloc searchBloc;
-
-// //   const SearchScreen({required this.searchBloc});
-
-// //   @override
-// //   Widget build(BuildContext context) {
-// //     return Scaffold(
-// //       appBar: AppBar(
-// //         title: const Text('Search'),
-// //       ),
-// //       body: BlocBuilder<SearchBloc, SearchState>(
-// //         builder: (context, state) {
-// //           if (state is SearchLoadingState) {
-// //             return Center(
-// //               child: CircularProgressIndicator(),
-// //             );
-// //           } else if (state is SearchLoadedState) {
-// //             return ListView(
-// //               children: state.probabilities.entries.map((entry) {
-// //                 if (context
-// //                     .watch<SearchBloc>()
-// //                     .selectedCategories[entry.key]!) {
-// //                   return ListTile(
-// //                     title: Text(entry.key),
-// //                     subtitle:
-// //                         Text('Probability: ${entry.value.toStringAsFixed(2)}'),
-// //                   );
-// //                 } else {
-// //                   return Container();
-// //                 }
-// //               }).toList(),
-// //             );
-// //           } else if (state is SearchErrorState) {
-// //             return Center(
-// //               child: Text('Error occurred while fetching data.'),
-// //             );
-// //           } else {
-// //             return Container();
-// //           }
-// //         },
-// //       ),
-// //     );
-// //   }
-// // }
-
-// -----------------------------------
-
+import 'package:filter101/constants/colour.dart';
+import 'package:filter101/constants/text_style.dart';
+import 'package:filter101/widgets/bottom_nav_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'search_bloc.dart';
@@ -141,72 +15,49 @@ class SearchScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Search',
-          style: TextStyle(
-            color: Colors.white,
+          'Prediction Results',
+          style: TextStyles.heading(
+            color: Colour.white,
             fontSize: 24.0,
             fontWeight: FontWeight.bold,
           ),
         ),
+        backgroundColor: Colour.hunterGreen,
+        centerTitle: true,
+        elevation: 0,
       ),
       body: BlocBuilder<SearchBloc, SearchState>(
-        bloc: this.searchBloc,
+        bloc: searchBloc,
         builder: (context, state) {
           if (state is SearchLoadingState) {
-            return Center(child: CircularProgressIndicator());
+            return Center(
+                child: CircularProgressIndicator(
+              color: Colour.hunterGreen,
+              semanticsLabel: 'Loading',
+              strokeWidth: 6.0,
+            ));
           } else if (state is SearchLoadedState) {
             final probabilities = state.probabilities;
-            final posts = state.posts;
+            final selectedCategories = searchBloc.selectedCategories;
+            final filteredCategories = selectedCategories.keys
+                .where((category) => selectedCategories[category] == true)
+                .toList();
 
-            // Print obtained probabilities
-            // if (probabilities!.containsKey('hateSpeechProbability'))
-            //   print(
-            //       'Hate Speech Score: ${probabilities!['hateSpeechProbability']!.toStringAsFixed(2)}');
-            // Print scores for other categories here
-            // Display category values here
-            print(
-              'Hate Speech: ${searchBloc.selectedCategories['hateSpeech']}',
-            );
-            print(
-              'Negative Content: ${searchBloc.selectedCategories['negativeContent']}',
-            );
-            print(
-              'Sarcasm Excluding: ${searchBloc.selectedCategories['sarcasmExcluding']}',
-            );
-            print(
-              'Sarcasm Including: ${searchBloc.selectedCategories['sarcasmIncluding']}',
-            );
-            print(
-              'Subreddit Name: ${searchBloc.subredditName}',
-            );
-            return Column(
-              children: [
-                Column(
-                  children: [
-                    if (probabilities!.containsKey('hateSpeech'))
-                      Text(
-                        'Hate Speech Score: ${probabilities['hateSpeech']!.toStringAsFixed(2)}',
-                        style: TextStyle(color: Colors.black),
-                        textAlign: TextAlign.center,
-                      ),
-                    // Display scores for other categories here
+            return ListView.builder(
+              itemCount: filteredCategories.length,
+              itemBuilder: (context, index) {
+                final category = filteredCategories[index];
+                final probability =
+                    probabilities![category]?.toStringAsFixed(2) ?? 'N/A';
 
-                    SizedBox(height: 20),
-                  ],
-                ),
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: posts!.length,
-                    itemBuilder: (context, index) {
-                      final post = posts[index];
-                      return ListTile(
-                        title: Text(post.title),
-                        // subtitle: Text(post.subreddit),
-                      );
-                    },
-                  ),
-                ),
-              ],
+                return ListTile(
+                  title: Text(category),
+                  subtitle: Text('Probability: $probability'),
+                  onTap: () {
+                    // Handle tile click
+                  },
+                );
+              },
             );
           } else if (state is SearchErrorState) {
             return Center(

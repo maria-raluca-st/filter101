@@ -1,3 +1,4 @@
+import 'package:filter101/features/home/presentation/page/home.dart';
 import 'package:filter101/features/search_screen/search_screen.dart';
 import 'package:filter101/widgets/bottom_nav_bar.dart';
 import 'package:flutter/material.dart';
@@ -34,6 +35,7 @@ class RouteEntity {
   RouteEntity.homeScreen()
       : name = Routes.homeScreen,
         view = const BottomNavigationScreen();
+  // view = const HomePage();
   // RouteEntity.searchPage({required SearchBloc searchBloc})
   //     : name = Routes.searchScreen,
   //       view = SearchScreen(searchBloc: searchBloc);

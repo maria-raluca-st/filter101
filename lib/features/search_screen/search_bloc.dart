@@ -1,150 +1,3 @@
-// import 'dart:async';
-// import 'package:bloc/bloc.dart';
-// import 'package:filter101/data/comment.dart';
-// import 'package:filter101/data/post.dart';
-// import 'package:filter101/network/reddit_service.dart';
-// import 'package:filter101/utils/classifier.dart';
-// import 'package:freezed_annotation/freezed_annotation.dart';
-// import 'package:injectable/injectable.dart';
-
-// part 'search_bloc.freezed.dart';
-// part 'search_event.dart';
-// part 'search_state.dart';
-
-// @lazySingleton
-// class SearchBloc extends Bloc<SearchEvent, SearchState> {
-//   final Classifier _classifier;
-//   String? _subredditName;
-//   final Map<String, bool> _selectedCategories = {
-//     'hateSpeech': false,
-//     'negativeContent': false,
-//     'humor': false,
-//     'positiveContent': false,
-//     'sarcasmExcluding': false,
-//     'sarcasmIncluding': false,
-//   };
-
-//   SearchBloc()
-//       : _classifier = Classifier(),
-//         super(const SearchState.initial());
-
-//   String? get subredditName => _subredditName;
-
-//   set subredditName(String? value) {
-//     _subredditName = value;
-//     // add(SearchEvent.fetchData(value!));
-//     add(FetchDataEvent(value!));
-//   }
-
-//   @override
-//   Stream<SearchState> mapEventToState(SearchEvent event) async* {
-//     yield* event.map(
-//       fetchData: (FetchDataEvent event) async* {
-//         yield const SearchState.loading();
-
-//         if (_subredditName == null) {
-//           yield const SearchState.error();
-//           return;
-//         }
-
-//         final List<RedditPost> fetchedPosts =
-//             await RedditService.fetchPosts(_subredditName!, 10);
-
-//         final List<RedditPost> processedPosts = [];
-//         final Map<String, int> categoryCounts = {
-//           'hateSpeech': 0,
-//           'negativeContent': 0,
-//           'humor': 0,
-//           'positiveContent': 0,
-//           'sarcasmExcluding': 0,
-//           'sarcasmIncluding': 0,
-//         };
-
-//         for (var post in fetchedPosts) {
-//           final List<RedditComment> comments =
-//               await RedditService.fetchComments(post.permalink, 10);
-//           post.comments = comments;
-
-//           // Classify post
-//           classifyContent(post.title, categoryCounts);
-
-//           // Classify comments
-//           for (var comment in comments) {
-//             classifyContent(comment.body, categoryCounts);
-//           }
-
-//           processedPosts.add(post);
-//         }
-
-//         final Map<String, double> probabilities =
-//             calculateProbabilities(categoryCounts);
-
-//         yield SearchState.loaded(
-//           posts: processedPosts,
-//           probabilities: probabilities,
-//         );
-//       },
-//       selectCategory: (SelectCategoryEvent event) async* {
-//         _selectedCategories[event.category] = event.selected;
-//         yield* mapEventToState(SearchEvent.fetchData(_subredditName!));
-//       },
-//       changeSubreddit: (ChangeSubredditEvent event) async* {
-//         _subredditName = event.subreddit;
-//         yield* mapEventToState(SearchEvent.fetchData(_subredditName!));
-//       },
-//     );
-//   }
-
-//   void classifyContent(String text, Map<String, int> categoryCounts) async {
-//     if (_selectedCategories['hateSpeech']!) {
-//       final prediction = await _classifier.classify(text, 'hate');
-//       if (prediction[1].score > prediction[0].score) {
-//         categoryCounts['hateSpeech'] = categoryCounts['hateSpeech']! + 1;
-//       }
-//     }
-
-//     if (_selectedCategories['negativeContent']!) {
-//       // Classify for negative content
-//       // ...
-//     }
-
-//     if (_selectedCategories['humor']!) {
-//       // Classify for humor
-//       // ...
-//     }
-
-//     if (_selectedCategories['positiveContent']!) {
-//       // Classify for positive content
-//       // ...
-//     }
-
-//     if (_selectedCategories['sarcasmExcluding']!) {
-//       // Classify for sarcasm excluding
-//       // ...
-//     }
-
-//     if (_selectedCategories['sarcasmIncluding']!) {
-//       // Classify for sarcasm including
-//       // ...
-//     }
-//   }
-
-//   Map<String, double> calculateProbabilities(Map<String, int> categoryCounts) {
-//     final Map<String, double> probabilities = {};
-
-//     // Calculate probabilities based on categoryCounts
-//     // ...
-
-//     return probabilities;
-//   }
-// }
-
-// ----------------------------------
-
-// SearchBloc(this._classifier) : super(const SearchState.initial()) {
-//   on<SearchEvent>(_onEvent);
-// }
-
 import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:filter101/data/comment.dart';
@@ -162,6 +15,7 @@ part 'search_state.dart';
 class SearchBloc extends Bloc<SearchEvent, SearchState> {
   final Classifier _classifier;
   String? _subredditName;
+  int _nrTextsAnalyzed = 200;
   final Map<String, bool> _selectedCategories = {
     'hateSpeech': false,
     'negativeContent': false,
@@ -194,6 +48,11 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
   }
 
   String? get subredditName => _subredditName;
+  int get nrTextsAnalyzed => _nrTextsAnalyzed;
+  set nrTextsAnalyzed(int value) {
+    _nrTextsAnalyzed = value;
+  }
+
   Map<String, bool> get selectedCategories => Map.from(_selectedCategories);
 
   void changeSubreddit(String subreddit) {
@@ -220,13 +79,13 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     }
 
     final List<RedditPost> fetchedPosts =
-        await RedditService.fetchPosts(subredditName, 10);
+        await RedditService.fetchPosts(subredditName);
 
     final List<RedditPost> processedPosts = [];
 
     for (var post in fetchedPosts) {
       final List<RedditComment> comments =
-          await RedditService.fetchComments(post.permalink, 10);
+          await RedditService.fetchComments(post.permalink);
       post.comments = comments;
 
       // Classify post
@@ -234,7 +93,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
 
       // Classify comments
       for (var comment in comments) {
-        classifyContent(comment.body, categoryCounts);
+        classifyContent(comment.body, categoryCounts, nrTextsAnalyzed);
       }
 
       processedPosts.add(post);
@@ -266,8 +125,10 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     add(SearchEvent.fetchData(_subredditName!));
   }
 
-  void classifyContent(String text, Map<String, int> categoryCounts) async {
-    if (_selectedCategories['hateSpeech']!) {
+  void classifyContent(
+      String text, Map<String, int> categoryCounts, int nrTextsAnalyzed) async {
+    if (_selectedCategories['hateSpeech']! &&
+        predictedTextsTotal['hateSpeech']! < nrTextsAnalyzed) {
       final prediction = await _classifier.classify(text, 'hate');
       print(prediction);
       if (prediction != null && prediction.length >= 2) {
@@ -279,7 +140,8 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
       }
     }
 
-    if (_selectedCategories['negativeContent']!) {
+    if (_selectedCategories['negativeContent']! &&
+        predictedTextsTotal['negativeContent']! < nrTextsAnalyzed) {
       final prediction = await _classifier.classify(text, 'emotion');
       print(prediction);
       if (prediction != null && prediction.length >= 2) {
@@ -292,7 +154,8 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
       }
     }
 
-    if (_selectedCategories['humor']!) {
+    if (_selectedCategories['humor']! &&
+        predictedTextsTotal['humor']! < nrTextsAnalyzed) {
       final prediction = await _classifier.classify(text, 'humor');
       print(prediction);
       if (prediction != null && prediction.length >= 2) {
@@ -303,7 +166,8 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
       }
     }
 
-    if (_selectedCategories['positiveContent']!) {
+    if (_selectedCategories['positiveContent']! &&
+        predictedTextsTotal['positiveContent']! < nrTextsAnalyzed) {
       final prediction = await _classifier.classify(text, 'emotion');
       print(prediction);
       if (prediction != null && prediction.length >= 2) {
@@ -316,7 +180,8 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
       }
     }
 
-    if (_selectedCategories['sarcasmExcluding']!) {
+    if (_selectedCategories['sarcasmExcluding']! &&
+        predictedTextsTotal['sarcasmExcluding']! < nrTextsAnalyzed) {
       final prediction = await _classifier.classify(text, 'sarcasm');
       print(prediction);
       if (prediction != null && prediction.length >= 2) {
@@ -329,7 +194,8 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
       }
     }
 
-    if (_selectedCategories['sarcasmIncluding']!) {
+    if (_selectedCategories['sarcasmIncluding']! &&
+        predictedTextsTotal['sarcasmIncluding']! < nrTextsAnalyzed) {
       final prediction = await _classifier.classify(text, 'sarcasm');
       print(prediction);
       if (prediction != null && prediction.length >= 2) {

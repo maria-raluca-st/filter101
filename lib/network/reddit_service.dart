@@ -81,8 +81,7 @@ class RedditService {
   //   }
   // }
 
-  static Future<List<RedditPost>> fetchPosts(
-      String subreddit, int limit) async {
+  static Future<List<RedditPost>> fetchPosts(String subreddit) async {
     try {
       final url = Uri.parse('https://www.reddit.com/r/$subreddit.json');
       final response = await http.get(url);
@@ -135,8 +134,7 @@ class RedditService {
     return [];
   }
 
-  static Future<List<RedditComment>> fetchComments(
-      String permalink, int limit) async {
+  static Future<List<RedditComment>> fetchComments(String permalink) async {
     try {
       final url = Uri.parse('https://www.reddit.com$permalink.json');
       final response = await http.get(url);

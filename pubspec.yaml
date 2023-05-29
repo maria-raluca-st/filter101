@@ -60,6 +60,7 @@ dependencies:
   build_runner: ^2.4.4
   bloc: ^8.1.2
   injectable: ^2.1.1
+  flutter_secure_storage: ^8.0.0
   # sqlite3_flutter_libs: ^0.5.15
 
 flutter_icons:
