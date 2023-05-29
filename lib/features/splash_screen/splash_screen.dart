@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:filter101/constants/asset_paths.dart';
 import 'package:filter101/constants/colour.dart';
 import 'package:filter101/constants/variables.dart';
+import 'package:filter101/network/secure_storage.dart';
 import 'package:flutter/material.dart';
 import '../../constants/text_style.dart';
 import '../../coordinator.dart';
@@ -31,19 +32,25 @@ class StartState extends State<SplashScreen> {
     return Timer(duration, route);
   }
 
-  route() {
-    Coordinator.of(context).push(RouteEntity.loginScreen());
+  // route() {
+  //   Coordinator.of(context).push(RouteEntity.loginScreen());
+  // }
+  route() async {
+    final secureStorage = SecureStorage();
+    final email = await secureStorage.getEmail();
+    final password = await secureStorage.getPassword();
+
+    if (email != null && password != null) {
+      // User is already logged in, navigate to the HomeScreen
+      Coordinator.of(context).push(RouteEntity.homeScreen());
+    } else {
+      // User is not logged in, navigate to the LoginScreen
+      Coordinator.of(context).push(RouteEntity.loginScreen());
+    }
   }
 
   initScreen(BuildContext context) {
-    return
-        // ResponsiveBreakpoints.builder(
-        //   breakpoints: [
-        //     const Breakpoint(start: 0, end: 450, name: MOBILE),
-        //     const Breakpoint(start: 451, end: 800, name: TABLET),
-        //   ],
-        // child:
-        Scaffold(
+    return Scaffold(
       backgroundColor: Colors.white,
       body: SizedBox(
         height: MediaQuery.of(context).size.height,
@@ -57,7 +64,6 @@ class StartState extends State<SplashScreen> {
                   AssetPaths.appIcon,
                 ),
               ),
-              // Spacer(),
               Padding(
                 padding: EdgeInsets.only(top: 0, bottom: 200),
                 child: Text(Variables.splashScreenText,

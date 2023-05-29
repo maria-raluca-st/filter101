@@ -1,4 +1,5 @@
 import 'package:filter101/features/home/presentation/page/home.dart';
+import 'package:filter101/features/profile/profile_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../constants/colour.dart';
@@ -106,8 +107,6 @@ class ProfileTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: Text('Profile Tab'),
-    );
+    return ProfileScreen();
   }
 }

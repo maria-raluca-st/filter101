@@ -1,3 +1,4 @@
+import 'package:filter101/network/secure_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -19,12 +20,18 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _passwordController = TextEditingController();
   final FirebaseAuth _auth = FirebaseAuth.instance;
   GoogleSignInAccount? _googleSignInAccount;
+  final SecureStorage _secureStorage = SecureStorage();
 
   Future<void> _login() async {
     try {
       UserCredential userCredential = await _auth.signInWithEmailAndPassword(
         email: _emailController.text.trim(),
         password: _passwordController.text.trim(),
+      );
+      // Save the user's credentials
+      await _secureStorage.saveCredentials(
+        _emailController.text.trim(),
+        _passwordController.text.trim(),
       );
       // Login successful, navigate to another screen
       // For example, Navigator.pushReplacement() to go to a home screen
@@ -55,6 +62,14 @@ class _LoginScreenState extends State<LoginScreen> {
             await _auth.signInWithCredential(credential);
         // Login with Google successful, navigate to another screen
         // For example, Navigator.pushReplacement() to go to a home screen
+
+        // Save the user's credentials
+        final email = userCredential.user?.email;
+        final password = googleAuth
+            .idToken; // Use the Google ID token as a temporary password
+        if (email != null && password != null) {
+          await _secureStorage.saveCredentials(email, password);
+        }
         Coordinator.of(context).push(RouteEntity.onboardingScreen());
         print('Log in w google succesful!');
       }
