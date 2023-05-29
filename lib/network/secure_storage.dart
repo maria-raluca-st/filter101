@@ -63,4 +63,25 @@ class SecureStorage {
   Future<void> deleteCredentials() async {
     await _storage.deleteAll();
   }
+
+  Future<Map<String, bool>?> getBoolMap() async {
+    final Map<String, bool> boolMap = {};
+    bool? value;
+
+    for (var key in [
+      _hateSpeech,
+      _negativeContent,
+      _humor,
+      _positiveContent,
+      _sarcasmExcluding,
+      _sarcasmIncluding
+    ]) {
+      value = await getBool(key);
+      if (value != null) {
+        boolMap[key] = value;
+      }
+    }
+
+    return boolMap;
+  }
 }

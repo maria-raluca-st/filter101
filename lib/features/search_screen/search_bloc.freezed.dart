@@ -19,6 +19,7 @@ mixin _$SearchEvent {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(String subredditName) fetchData,
+    required TResult Function() fetchInitialData,
     required TResult Function(String category, bool selected) selectCategory,
     required TResult Function(String subreddit) changeSubreddit,
   }) =>
@@ -26,6 +27,7 @@ mixin _$SearchEvent {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(String subredditName)? fetchData,
+    TResult? Function()? fetchInitialData,
     TResult? Function(String category, bool selected)? selectCategory,
     TResult? Function(String subreddit)? changeSubreddit,
   }) =>
@@ -33,6 +35,7 @@ mixin _$SearchEvent {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(String subredditName)? fetchData,
+    TResult Function()? fetchInitialData,
     TResult Function(String category, bool selected)? selectCategory,
     TResult Function(String subreddit)? changeSubreddit,
     required TResult orElse(),
@@ -41,6 +44,7 @@ mixin _$SearchEvent {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(FetchDataEvent value) fetchData,
+    required TResult Function(FetchInitialDataEvent value) fetchInitialData,
     required TResult Function(SelectCategoryEvent value) selectCategory,
     required TResult Function(ChangeSubredditEvent value) changeSubreddit,
   }) =>
@@ -48,6 +52,7 @@ mixin _$SearchEvent {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(FetchDataEvent value)? fetchData,
+    TResult? Function(FetchInitialDataEvent value)? fetchInitialData,
     TResult? Function(SelectCategoryEvent value)? selectCategory,
     TResult? Function(ChangeSubredditEvent value)? changeSubreddit,
   }) =>
@@ -55,6 +60,7 @@ mixin _$SearchEvent {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(FetchDataEvent value)? fetchData,
+    TResult Function(FetchInitialDataEvent value)? fetchInitialData,
     TResult Function(SelectCategoryEvent value)? selectCategory,
     TResult Function(ChangeSubredditEvent value)? changeSubreddit,
     required TResult orElse(),
@@ -146,6 +152,7 @@ class _$FetchDataEvent implements FetchDataEvent {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(String subredditName) fetchData,
+    required TResult Function() fetchInitialData,
     required TResult Function(String category, bool selected) selectCategory,
     required TResult Function(String subreddit) changeSubreddit,
   }) {
@@ -156,6 +163,7 @@ class _$FetchDataEvent implements FetchDataEvent {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(String subredditName)? fetchData,
+    TResult? Function()? fetchInitialData,
     TResult? Function(String category, bool selected)? selectCategory,
     TResult? Function(String subreddit)? changeSubreddit,
   }) {
@@ -166,6 +174,7 @@ class _$FetchDataEvent implements FetchDataEvent {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(String subredditName)? fetchData,
+    TResult Function()? fetchInitialData,
     TResult Function(String category, bool selected)? selectCategory,
     TResult Function(String subreddit)? changeSubreddit,
     required TResult orElse(),
@@ -180,6 +189,7 @@ class _$FetchDataEvent implements FetchDataEvent {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(FetchDataEvent value) fetchData,
+    required TResult Function(FetchInitialDataEvent value) fetchInitialData,
     required TResult Function(SelectCategoryEvent value) selectCategory,
     required TResult Function(ChangeSubredditEvent value) changeSubreddit,
   }) {
@@ -190,6 +200,7 @@ class _$FetchDataEvent implements FetchDataEvent {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(FetchDataEvent value)? fetchData,
+    TResult? Function(FetchInitialDataEvent value)? fetchInitialData,
     TResult? Function(SelectCategoryEvent value)? selectCategory,
     TResult? Function(ChangeSubredditEvent value)? changeSubreddit,
   }) {
@@ -200,6 +211,7 @@ class _$FetchDataEvent implements FetchDataEvent {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(FetchDataEvent value)? fetchData,
+    TResult Function(FetchInitialDataEvent value)? fetchInitialData,
     TResult Function(SelectCategoryEvent value)? selectCategory,
     TResult Function(ChangeSubredditEvent value)? changeSubreddit,
     required TResult orElse(),
@@ -218,6 +230,120 @@ abstract class FetchDataEvent implements SearchEvent {
   @JsonKey(ignore: true)
   _$$FetchDataEventCopyWith<_$FetchDataEvent> get copyWith =>
       throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$FetchInitialDataEventCopyWith<$Res> {
+  factory _$$FetchInitialDataEventCopyWith(_$FetchInitialDataEvent value,
+          $Res Function(_$FetchInitialDataEvent) then) =
+      __$$FetchInitialDataEventCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$FetchInitialDataEventCopyWithImpl<$Res>
+    extends _$SearchEventCopyWithImpl<$Res, _$FetchInitialDataEvent>
+    implements _$$FetchInitialDataEventCopyWith<$Res> {
+  __$$FetchInitialDataEventCopyWithImpl(_$FetchInitialDataEvent _value,
+      $Res Function(_$FetchInitialDataEvent) _then)
+      : super(_value, _then);
+}
+
+/// @nodoc
+
+class _$FetchInitialDataEvent implements FetchInitialDataEvent {
+  const _$FetchInitialDataEvent();
+
+  @override
+  String toString() {
+    return 'SearchEvent.fetchInitialData()';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _$FetchInitialDataEvent);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(String subredditName) fetchData,
+    required TResult Function() fetchInitialData,
+    required TResult Function(String category, bool selected) selectCategory,
+    required TResult Function(String subreddit) changeSubreddit,
+  }) {
+    return fetchInitialData();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(String subredditName)? fetchData,
+    TResult? Function()? fetchInitialData,
+    TResult? Function(String category, bool selected)? selectCategory,
+    TResult? Function(String subreddit)? changeSubreddit,
+  }) {
+    return fetchInitialData?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(String subredditName)? fetchData,
+    TResult Function()? fetchInitialData,
+    TResult Function(String category, bool selected)? selectCategory,
+    TResult Function(String subreddit)? changeSubreddit,
+    required TResult orElse(),
+  }) {
+    if (fetchInitialData != null) {
+      return fetchInitialData();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(FetchDataEvent value) fetchData,
+    required TResult Function(FetchInitialDataEvent value) fetchInitialData,
+    required TResult Function(SelectCategoryEvent value) selectCategory,
+    required TResult Function(ChangeSubredditEvent value) changeSubreddit,
+  }) {
+    return fetchInitialData(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(FetchDataEvent value)? fetchData,
+    TResult? Function(FetchInitialDataEvent value)? fetchInitialData,
+    TResult? Function(SelectCategoryEvent value)? selectCategory,
+    TResult? Function(ChangeSubredditEvent value)? changeSubreddit,
+  }) {
+    return fetchInitialData?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(FetchDataEvent value)? fetchData,
+    TResult Function(FetchInitialDataEvent value)? fetchInitialData,
+    TResult Function(SelectCategoryEvent value)? selectCategory,
+    TResult Function(ChangeSubredditEvent value)? changeSubreddit,
+    required TResult orElse(),
+  }) {
+    if (fetchInitialData != null) {
+      return fetchInitialData(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class FetchInitialDataEvent implements SearchEvent {
+  const factory FetchInitialDataEvent() = _$FetchInitialDataEvent;
 }
 
 /// @nodoc
@@ -296,6 +422,7 @@ class _$SelectCategoryEvent implements SelectCategoryEvent {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(String subredditName) fetchData,
+    required TResult Function() fetchInitialData,
     required TResult Function(String category, bool selected) selectCategory,
     required TResult Function(String subreddit) changeSubreddit,
   }) {
@@ -306,6 +433,7 @@ class _$SelectCategoryEvent implements SelectCategoryEvent {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(String subredditName)? fetchData,
+    TResult? Function()? fetchInitialData,
     TResult? Function(String category, bool selected)? selectCategory,
     TResult? Function(String subreddit)? changeSubreddit,
   }) {
@@ -316,6 +444,7 @@ class _$SelectCategoryEvent implements SelectCategoryEvent {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(String subredditName)? fetchData,
+    TResult Function()? fetchInitialData,
     TResult Function(String category, bool selected)? selectCategory,
     TResult Function(String subreddit)? changeSubreddit,
     required TResult orElse(),
@@ -330,6 +459,7 @@ class _$SelectCategoryEvent implements SelectCategoryEvent {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(FetchDataEvent value) fetchData,
+    required TResult Function(FetchInitialDataEvent value) fetchInitialData,
     required TResult Function(SelectCategoryEvent value) selectCategory,
     required TResult Function(ChangeSubredditEvent value) changeSubreddit,
   }) {
@@ -340,6 +470,7 @@ class _$SelectCategoryEvent implements SelectCategoryEvent {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(FetchDataEvent value)? fetchData,
+    TResult? Function(FetchInitialDataEvent value)? fetchInitialData,
     TResult? Function(SelectCategoryEvent value)? selectCategory,
     TResult? Function(ChangeSubredditEvent value)? changeSubreddit,
   }) {
@@ -350,6 +481,7 @@ class _$SelectCategoryEvent implements SelectCategoryEvent {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(FetchDataEvent value)? fetchData,
+    TResult Function(FetchInitialDataEvent value)? fetchInitialData,
     TResult Function(SelectCategoryEvent value)? selectCategory,
     TResult Function(ChangeSubredditEvent value)? changeSubreddit,
     required TResult orElse(),
@@ -440,6 +572,7 @@ class _$ChangeSubredditEvent implements ChangeSubredditEvent {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(String subredditName) fetchData,
+    required TResult Function() fetchInitialData,
     required TResult Function(String category, bool selected) selectCategory,
     required TResult Function(String subreddit) changeSubreddit,
   }) {
@@ -450,6 +583,7 @@ class _$ChangeSubredditEvent implements ChangeSubredditEvent {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(String subredditName)? fetchData,
+    TResult? Function()? fetchInitialData,
     TResult? Function(String category, bool selected)? selectCategory,
     TResult? Function(String subreddit)? changeSubreddit,
   }) {
@@ -460,6 +594,7 @@ class _$ChangeSubredditEvent implements ChangeSubredditEvent {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(String subredditName)? fetchData,
+    TResult Function()? fetchInitialData,
     TResult Function(String category, bool selected)? selectCategory,
     TResult Function(String subreddit)? changeSubreddit,
     required TResult orElse(),
@@ -474,6 +609,7 @@ class _$ChangeSubredditEvent implements ChangeSubredditEvent {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(FetchDataEvent value) fetchData,
+    required TResult Function(FetchInitialDataEvent value) fetchInitialData,
     required TResult Function(SelectCategoryEvent value) selectCategory,
     required TResult Function(ChangeSubredditEvent value) changeSubreddit,
   }) {
@@ -484,6 +620,7 @@ class _$ChangeSubredditEvent implements ChangeSubredditEvent {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(FetchDataEvent value)? fetchData,
+    TResult? Function(FetchInitialDataEvent value)? fetchInitialData,
     TResult? Function(SelectCategoryEvent value)? selectCategory,
     TResult? Function(ChangeSubredditEvent value)? changeSubreddit,
   }) {
@@ -494,6 +631,7 @@ class _$ChangeSubredditEvent implements ChangeSubredditEvent {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(FetchDataEvent value)? fetchData,
+    TResult Function(FetchInitialDataEvent value)? fetchInitialData,
     TResult Function(SelectCategoryEvent value)? selectCategory,
     TResult Function(ChangeSubredditEvent value)? changeSubreddit,
     required TResult orElse(),

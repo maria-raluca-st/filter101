@@ -3,6 +3,7 @@ import 'package:bloc/bloc.dart';
 import 'package:filter101/data/comment.dart';
 import 'package:filter101/data/post.dart';
 import 'package:filter101/network/reddit_service.dart';
+import 'package:filter101/network/secure_storage.dart';
 import 'package:filter101/utils/classifier.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
@@ -45,6 +46,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
       : _classifier = Classifier(),
         super(const SearchState.initial()) {
     on<SearchEvent>(_onEvent);
+    _loadSelectedCategories();
   }
 
   String? get subredditName => _subredditName;
@@ -54,6 +56,15 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
   }
 
   Map<String, bool> get selectedCategories => Map.from(_selectedCategories);
+  void _loadSelectedCategories() async {
+    final SecureStorage _secureStorage = SecureStorage();
+    final Map<String, bool>? storedCategories =
+        await _secureStorage.getBoolMap();
+    if (storedCategories != null) {
+      _selectedCategories.addAll(storedCategories);
+      print(_selectedCategories);
+    }
+  }
 
   void changeSubreddit(String subreddit) {
     add(SearchEvent.changeSubreddit(subreddit: subreddit));
@@ -67,7 +78,16 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
           _mapSelectCategoryEvent(category, selected, emit),
       changeSubreddit: (String subreddit) =>
           _mapChangeSubredditEvent(subreddit),
+      fetchInitialData: () => _mapFetchInitialDataEvent(emit),
     );
+  }
+
+  _mapFetchInitialDataEvent(Emitter<SearchState> emit) {
+    emit(SearchState.loading());
+    _loadSelectedCategories();
+    emit(SearchState.loaded(
+      selectedCategories: _selectedCategories,
+    ));
   }
 
   _mapFetchDataEvent(String subredditName, Emitter<SearchState> emit) async {

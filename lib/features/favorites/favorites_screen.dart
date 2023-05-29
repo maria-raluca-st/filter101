@@ -1,3 +1,5 @@
+import 'package:filter101/constants/colour.dart';
+import 'package:filter101/constants/text_style.dart';
 import 'package:filter101/network/secure_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -22,15 +24,72 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Favorites'),
+        leading: SizedBox(),
+        title: Text(
+          'Favorites',
+          style: TextStyles.heading(
+            color: Colour.white,
+            fontSize: 24.0,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        backgroundColor: Colour.hunterGreen,
+        centerTitle: true,
+        elevation: 0,
       ),
-      body: Column(
-        children: categoryLabels.keys.map((String key) {
-          return FavoriteButton(
-            label: categoryLabels[key]!,
-            storageKey: key,
-          );
-        }).toList(),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              'Here you can choose your prefered categories:',
+              style: TextStyles.heading(fontSize: 16),
+            ),
+            SizedBox(
+              height: 40,
+            ),
+            Text(
+              'Inclusive',
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 20),
+            Column(
+              children: categoryLabels.keys
+                  .where((key) =>
+                      key != 'hateSpeech' &&
+                      key != 'negativeContent' &&
+                      key != 'sarcasmExcluding')
+                  .map((String key) {
+                return FavoriteButton(
+                  label: categoryLabels[key]!,
+                  storageKey: key,
+                );
+              }).toList(),
+            ),
+            SizedBox(height: 40),
+            Text(
+              'Exclusive',
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 20),
+            Column(
+              children: [
+                FavoriteButton(
+                  label: categoryLabels['hateSpeech']!,
+                  storageKey: 'hateSpeech',
+                ),
+                FavoriteButton(
+                  label: categoryLabels['negativeContent']!,
+                  storageKey: 'negativeContent',
+                ),
+                FavoriteButton(
+                  label: categoryLabels['sarcasmExcluding']!,
+                  storageKey: 'sarcasmExcluding',
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -85,7 +144,7 @@ class _FavoriteButtonState extends State<FavoriteButton> {
         ),
       ),
       style: ElevatedButton.styleFrom(
-        primary: _isFavorite ? Colors.blue : Colors.grey,
+        primary: _isFavorite ? Colour.hunterGreen : Colour.ashGray,
       ),
     );
   }
