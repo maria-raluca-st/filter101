@@ -34,9 +34,9 @@ class _LoginScreenState extends State<LoginScreen> {
         _passwordController.text.trim(),
       );
       // Login successful, navigate to another screen
-      // For example, Navigator.pushReplacement() to go to a home screen
+
       print('Login successful!');
-      Coordinator.of(context).push(RouteEntity.onboardingScreen());
+      Coordinator.of(context).push(RouteEntity.homeScreen());
     } on FirebaseAuthException catch (e) {
       // Handle login errors
       print('Login failed. Error: ${e.message}');
@@ -61,7 +61,6 @@ class _LoginScreenState extends State<LoginScreen> {
         final UserCredential userCredential =
             await _auth.signInWithCredential(credential);
         // Login with Google successful, navigate to another screen
-        // For example, Navigator.pushReplacement() to go to a home screen
 
         // Save the user's credentials
         final email = userCredential.user?.email;
@@ -70,7 +69,7 @@ class _LoginScreenState extends State<LoginScreen> {
         if (email != null && password != null) {
           await _secureStorage.saveCredentials(email, password);
         }
-        Coordinator.of(context).push(RouteEntity.onboardingScreen());
+        Coordinator.of(context).push(RouteEntity.homeScreen());
         print('Log in w google succesful!');
       }
     } catch (e) {

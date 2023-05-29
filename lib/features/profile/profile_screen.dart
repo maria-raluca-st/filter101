@@ -23,10 +23,13 @@ class ProfileScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colour.hunterGreen,
+        centerTitle: true,
+        leading: SizedBox(),
         title: Text(
           'Profile',
           style: TextStyles.heading(
-            color: Colour.black,
+            color: Colour.white,
             fontSize: 24.0,
             fontWeight: FontWeight.bold,
           ),

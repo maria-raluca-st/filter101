@@ -1,4 +1,6 @@
+import 'package:filter101/features/favorites/favorites_screen.dart';
 import 'package:filter101/features/home/presentation/page/home.dart';
+import 'package:filter101/features/onboarding/presentation/page/onboarding.dart';
 import 'package:filter101/features/profile/profile_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -85,9 +87,7 @@ class FavoritesTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: Text('Favorites Tab'),
-    );
+    return FavoritesScreen();
   }
 }
 
@@ -97,7 +97,7 @@ class InfoTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Center(
-      child: Text('Info Tab'),
+      child: OnboardingScreen(),
     );
   }
 }
