@@ -1,30 +1,7 @@
-// import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'dart:io';
 
-// class SecureStorage {
-//   final FlutterSecureStorage _storage = FlutterSecureStorage();
-//   static const _keyEmail = 'email';
-//   static const _keyPassword = 'password';
-
-//   Future<void> saveCredentials(String email, String password) async {
-//     await _storage.write(key: _keyEmail, value: email);
-//     await _storage.write(key: _keyPassword, value: password);
-//   }
-
-//   Future<String?> getEmail() async {
-//     return await _storage.read(key: _keyEmail);
-//   }
-
-//   Future<String?> getPassword() async {
-//     return await _storage.read(key: _keyPassword);
-//   }
-
-//   Future<void> deleteCredentials() async {
-//     await _storage.delete(key: _keyEmail);
-//     await _storage.delete(key: _keyPassword);
-//   }
-// }
-
-// --------------------------------------------------------------------------------------------
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class SecureStorage {
@@ -83,5 +60,61 @@ class SecureStorage {
     }
 
     return boolMap;
+  }
+
+  Future<String?> uploadProfilePicture(String userId, String imagePath) async {
+    final Reference storageRef =
+        FirebaseStorage.instance.ref().child('profile_pictures/$userId');
+
+    try {
+      final UploadTask uploadTask = storageRef.putFile(File(imagePath));
+
+      final TaskSnapshot taskSnapshot = await uploadTask;
+
+      if (taskSnapshot.state == TaskState.success) {
+        final imageUrl = await storageRef.getDownloadURL();
+        return imageUrl;
+      } else {
+        return null;
+      }
+    } catch (e) {
+      print('Error uploading profile picture: $e');
+      return null;
+    }
+  }
+
+  Future<String?> getProfilePictureUrl(String userId) async {
+    try {
+      final Reference storageRef =
+          FirebaseStorage.instance.ref().child('profile_pictures/$userId');
+
+      final imageUrl = await storageRef.getDownloadURL();
+      return imageUrl;
+    } catch (e) {
+      print('Error retrieving profile picture URL: $e');
+      return null;
+    }
+  }
+
+  Future<void> changeEmailAddress(String newEmail) async {
+    try {
+      final currentUser = FirebaseAuth.instance.currentUser;
+      await currentUser?.updateEmail(newEmail);
+      await _storage.write(key: _keyEmail, value: newEmail);
+    } catch (e) {
+      print('Error changing email address: $e');
+      throw e;
+    }
+  }
+
+  Future<void> changePassword(String newPassword) async {
+    try {
+      final currentUser = FirebaseAuth.instance.currentUser;
+      await currentUser?.updatePassword(newPassword);
+      await _storage.write(key: _keyPassword, value: newPassword);
+    } catch (e) {
+      print('Error changing password: $e');
+      throw e;
+    }
   }
 }

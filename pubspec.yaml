@@ -61,6 +61,8 @@ dependencies:
   bloc: ^8.1.2
   injectable: ^2.1.1
   flutter_secure_storage: ^8.0.0
+  image_picker: ^0.8.7+5
+  firebase_storage: ^11.2.1
   # sqlite3_flutter_libs: ^0.5.15
 
 flutter_icons:
