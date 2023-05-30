@@ -37,58 +37,84 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
         centerTitle: true,
         elevation: 0,
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              'Here you can choose your prefered categories:',
-              style: TextStyles.heading(fontSize: 16),
-            ),
-            SizedBox(
-              height: 40,
-            ),
-            Text(
-              'Inclusive',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 20),
-            Column(
-              children: categoryLabels.keys
-                  .where((key) =>
-                      key != 'hateSpeech' &&
-                      key != 'negativeContent' &&
-                      key != 'sarcasmExcluding')
-                  .map((String key) {
-                return FavoriteButton(
-                  label: categoryLabels[key]!,
-                  storageKey: key,
-                );
-              }).toList(),
-            ),
-            SizedBox(height: 40),
-            Text(
-              'Exclusive',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 20),
-            Column(
-              children: [
-                FavoriteButton(
-                  label: categoryLabels['hateSpeech']!,
-                  storageKey: 'hateSpeech',
+      body: SingleChildScrollView(
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(height: 30),
+              Text(
+                'Here you can choose your prefered categories:',
+                style: TextStyles.heading(fontSize: 16),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Text(
+                'Excluding',
+                style: TextStyles.heading(),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                child: Text(
+                  'The results will be the probabilities that the content will not contain the following categories:',
+                  style: TextStyles.subheading(),
                 ),
-                FavoriteButton(
-                  label: categoryLabels['negativeContent']!,
-                  storageKey: 'negativeContent',
+              ),
+              SizedBox(height: 20),
+              Column(
+                children: [
+                  FavoriteButton(
+                    label: categoryLabels['hateSpeech']!,
+                    storageKey: 'hateSpeech',
+                  ),
+                  FavoriteButton(
+                    label: categoryLabels['negativeContent']!,
+                    storageKey: 'negativeContent',
+                  ),
+                  FavoriteButton(
+                    label: categoryLabels['sarcasmExcluding']!,
+                    storageKey: 'sarcasmExcluding',
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Text(
+                'Including',
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                child: Text(
+                  'The results will be the probabilities that the content will contain the following categories:',
+                  style: TextStyles.subheading(),
                 ),
-                FavoriteButton(
-                  label: categoryLabels['sarcasmExcluding']!,
-                  storageKey: 'sarcasmExcluding',
-                ),
-              ],
-            ),
-          ],
+              ),
+              SizedBox(height: 20),
+              Column(
+                children: categoryLabels.keys
+                    .where((key) =>
+                        key != 'hateSpeech' &&
+                        key != 'negativeContent' &&
+                        key != 'sarcasmExcluding')
+                    .map((String key) {
+                  return FavoriteButton(
+                    label: categoryLabels[key]!,
+                    storageKey: key,
+                  );
+                }).toList(),
+              ),
+              SizedBox(height: 40),
+            ],
+          ),
         ),
       ),
     );
