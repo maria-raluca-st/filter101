@@ -96,16 +96,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
-  // Future<void> _changeEmailAddress(BuildContext context) async {
-  //   // Implement logic for changing email address
-  //   // ...
-  // }
-
-  // Future<void> _changePassword(BuildContext context) async {
-  //   // Implement logic for changing password
-  //   // ...
-  // }
-
   Future<void> _changeEmailAddress(BuildContext context) async {
     final secureStorage = SecureStorage();
     final currentEmail = await secureStorage.getEmail();
@@ -117,22 +107,26 @@ class _ProfileScreenState extends State<ProfileScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Change Email Address'),
+          title: Text(
+            'Change Email Address',
+            style: TextStyles.heading(),
+          ),
           content: TextField(
             controller: emailController,
             decoration: InputDecoration(
-              labelText: 'New Email Address',
-            ),
+                labelText: 'New Email Address', labelStyle: TextStyles.body()),
           ),
           actions: <Widget>[
             TextButton(
-              child: Text('Cancel'),
+              child: Text('Cancel',
+                  style: TextStyles.subheading(color: Colour.atomicTangerine)),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             TextButton(
-              child: Text('Save'),
+              child: Text('Save',
+                  style: TextStyles.subheading(color: Colour.hunterGreen)),
               onPressed: () async {
                 final newEmail = emailController.text;
 
@@ -161,34 +155,40 @@ class _ProfileScreenState extends State<ProfileScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Change Password'),
+          title: Text(
+            'Change Password',
+            style: TextStyles.heading(),
+          ),
           content: Column(
             children: [
               TextField(
                 controller: passwordController,
                 obscureText: true,
                 decoration: InputDecoration(
-                  labelText: 'New Password',
-                ),
+                    labelText: 'New Password', labelStyle: TextStyles.body()),
               ),
               TextField(
                 controller: confirmPasswordController,
                 obscureText: true,
                 decoration: InputDecoration(
-                  labelText: 'Confirm New Password',
-                ),
+                    labelText: 'Confirm New Password',
+                    labelStyle: TextStyles.body()),
               ),
             ],
           ),
           actions: <Widget>[
             TextButton(
-              child: Text('Cancel'),
+              child: Text(
+                'Cancel',
+                style: TextStyles.subheading(color: Colour.atomicTangerine),
+              ),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             TextButton(
-              child: Text('Save'),
+              child: Text('Save',
+                  style: TextStyles.subheading(color: Colour.hunterGreen)),
               onPressed: () async {
                 final newPassword = passwordController.text;
                 final confirmPassword = confirmPasswordController.text;
@@ -252,7 +252,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                 ),
               ),
-              const SizedBox(height: 16.0),
+              const SizedBox(height: 46.0),
               Text(
                 _userEmail ?? '',
                 style: TextStyles.subheading(fontSize: 18),
