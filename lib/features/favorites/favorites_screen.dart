@@ -71,10 +71,10 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                     label: categoryLabels['hateSpeech']!,
                     storageKey: 'hateSpeech',
                   ),
-                  FavoriteButton(
-                    label: categoryLabels['negativeContent']!,
-                    storageKey: 'negativeContent',
-                  ),
+                  // FavoriteButton(
+                  //   label: categoryLabels['negativeContent']!,
+                  //   storageKey: 'negativeContent',
+                  // ),
                   FavoriteButton(
                     label: categoryLabels['sarcasmExcluding']!,
                     storageKey: 'sarcasmExcluding',
@@ -82,7 +82,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                 ],
               ),
               SizedBox(
-                height: 20,
+                height: 40,
               ),
               Text(
                 'Including',

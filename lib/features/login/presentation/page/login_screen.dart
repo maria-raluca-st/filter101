@@ -22,6 +22,27 @@ class _LoginScreenState extends State<LoginScreen> {
   GoogleSignInAccount? _googleSignInAccount;
   final SecureStorage _secureStorage = SecureStorage();
 
+  // Future<void> _login() async {
+  //   try {
+  //     UserCredential userCredential = await _auth.signInWithEmailAndPassword(
+  //       email: _emailController.text.trim(),
+  //       password: _passwordController.text.trim(),
+  //     );
+  //     // Save the user's credentials
+  //     await _secureStorage.saveCredentials(
+  //       _emailController.text.trim(),
+  //       _passwordController.text.trim(),
+  //     );
+  //     // Login successful, navigate to another screen
+
+  //     print('Login successful!');
+  //     Coordinator.of(context).push(RouteEntity.homeScreen());
+  //   } on FirebaseAuthException catch (e) {
+  //     // Handle login errors
+  //     print('Login failed. Error: ${e.message}');
+  //   }
+  // }
+
   Future<void> _login() async {
     try {
       UserCredential userCredential = await _auth.signInWithEmailAndPassword(
@@ -39,7 +60,38 @@ class _LoginScreenState extends State<LoginScreen> {
       Coordinator.of(context).push(RouteEntity.homeScreen());
     } on FirebaseAuthException catch (e) {
       // Handle login errors
-      print('Login failed. Error: ${e.message}');
+      if (e.code == 'user-not-found' || e.code == 'wrong-password') {
+        // Wrong credentials, show a custom message
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text('Login Failed'),
+            content: Text('Invalid email or password.'),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: Text('OK'),
+              ),
+            ],
+          ),
+        );
+      } else {
+        // Other login errors, show a general message
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text('Login Failed'),
+            content:
+                Text('An error occurred while logging in. Please try again.'),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: Text('OK'),
+              ),
+            ],
+          ),
+        );
+      }
     }
   }
 
@@ -124,6 +176,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         border: InputBorder.none,
                         labelStyle: TextStyles.body(fontSize: 18),
                       ),
+                      keyboardType: TextInputType.emailAddress,
+                      textInputAction: TextInputAction.next,
                     ),
                   ),
                   const SizedBox(height: 16.0),
@@ -141,6 +195,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         border: InputBorder.none,
                         labelStyle: TextStyles.body(fontSize: 18),
                       ),
+                      textInputAction: TextInputAction.done,
                     ),
                   ),
                   const SizedBox(height: 16.0),

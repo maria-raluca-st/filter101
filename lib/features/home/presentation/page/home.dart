@@ -171,47 +171,49 @@ class _HomePageContentState extends State<_HomePageContent> {
                                     setState(() {
                                       searchBloc.add(
                                         SelectCategoryEvent(
-                                          category: 'negativeContent',
+                                          category: 'sarcasmExcluding',
                                           selected:
                                               !searchBloc.selectedCategories[
-                                                  'negativeContent']!,
+                                                  'sarcasmExcluding']!,
                                         ),
                                       );
                                     });
                                   },
                                   style: ElevatedButton.styleFrom(
                                     primary: searchBloc.selectedCategories[
-                                            'negativeContent']!
+                                            'sarcasmExcluding']!
                                         ? Colour.hunterGreen
                                         : Colour.ashGray,
                                   ),
-                                  child: const Text('Negative Content'),
+                                  child: const Text('Sarcasm'),
                                 ),
                               ],
                             ),
                           ),
-                          Center(
-                            child: ElevatedButton(
-                              onPressed: () {
-                                setState(() {
-                                  searchBloc.add(
-                                    SelectCategoryEvent(
-                                      category: 'sarcasmExcluding',
-                                      selected: !searchBloc.selectedCategories[
-                                          'sarcasmExcluding']!,
-                                    ),
-                                  );
-                                });
-                              },
-                              style: ElevatedButton.styleFrom(
-                                primary: searchBloc
-                                        .selectedCategories['sarcasmExcluding']!
-                                    ? Colour.hunterGreen
-                                    : Colour.ashGray,
-                              ),
-                              child: const Text('Sarcasm'),
-                            ),
-                          ),
+                          // Center(
+                          //   child:
+                          // ElevatedButton(
+                          //   onPressed: () {
+                          //     setState(() {
+                          //       searchBloc.add(
+                          //         SelectCategoryEvent(
+                          //           category: 'negativeContent',
+                          //           selected:
+                          //               !searchBloc.selectedCategories[
+                          //                   'negativeContent']!,
+                          //         ),
+                          //       );
+                          //     });
+                          //   },
+                          //   style: ElevatedButton.styleFrom(
+                          //     primary: searchBloc.selectedCategories[
+                          //             'negativeContent']!
+                          //         ? Colour.hunterGreen
+                          //         : Colour.ashGray,
+                          //   ),
+                          //   child: const Text('Negative Content'),
+                          // ),
+                          // ),
                         ],
                       ),
                       const SizedBox(height: 20.0),

@@ -6,6 +6,11 @@ class RedditPost {
   final String permalink;
   final String selfText;
   List<RedditComment> comments;
+  double? probabilityHateSpeech;
+  double? probabilitySarcasmExcluding;
+  double? probabilitySarcasmIncluding;
+  double? probabilityPositiveContent;
+  double? probabilityHumor;
 
   RedditPost({
     required this.title,
@@ -13,6 +18,11 @@ class RedditPost {
     required this.permalink,
     required this.selfText,
     this.comments = const [],
+    this.probabilityHateSpeech = 0.0,
+    this.probabilitySarcasmExcluding = 0.0,
+    this.probabilitySarcasmIncluding = 0.0,
+    this.probabilityPositiveContent = 0.0,
+    this.probabilityHumor = 0.0,
   });
 
   factory RedditPost.fromJson(Map<String, dynamic> json) {

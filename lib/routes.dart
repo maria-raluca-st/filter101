@@ -1,3 +1,4 @@
+import 'package:filter101/features/category_details/category_details_screen.dart';
 import 'package:filter101/features/home/presentation/page/home.dart';
 import 'package:filter101/features/search_screen/search_screen.dart';
 import 'package:filter101/widgets/bottom_nav_bar.dart';
@@ -14,6 +15,7 @@ abstract class Routes {
   static const onboardingScreen = 'ONBOARDING_SCREEN';
   static const homeScreen = 'HOME_SCREEN';
   static const searchScreen = 'SEARCH_SCREEN';
+  static const detailsScreen = 'DETAILS_SCREEN';
 }
 
 class RouteEntity {
@@ -35,6 +37,13 @@ class RouteEntity {
   RouteEntity.homeScreen()
       : name = Routes.homeScreen,
         view = const BottomNavigationScreen();
+
+  RouteEntity.detailsScreen(category, posts)
+      : name = Routes.detailsScreen,
+        view = CategoryDetailsScreen(
+          category: category,
+          posts: posts,
+        );
   // view = const HomePage();
   // RouteEntity.searchPage({required SearchBloc searchBloc})
   //     : name = Routes.searchScreen,

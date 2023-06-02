@@ -1,8 +1,10 @@
 import 'package:filter101/constants/colour.dart';
 import 'package:filter101/constants/text_style.dart';
-import 'package:filter101/widgets/bottom_nav_bar.dart';
+import 'package:filter101/features/category_details/category_details_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../coordinator.dart';
+import '../../routes.dart';
 import 'search_bloc.dart';
 
 class SearchScreen extends StatelessWidget {
@@ -54,16 +56,49 @@ class SearchScreen extends StatelessWidget {
                   title: Text(category),
                   subtitle: Text('Probability: $probability'),
                   onTap: () {
-                    // Handle tile click
+                    // // Handle tile click
+                    Coordinator.of(context).push(RouteEntity.detailsScreen(
+                        category, searchBloc.processedPosts));
+
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(
+                    //     builder: (context) => CategoryDetailsScreen(
+                    //       category: category,
+                    //       posts: searchBloc.processedPosts,
+                    //     ),
+                    //   ),
+                    // );
                   },
                 );
               },
             );
           } else if (state is SearchErrorState) {
-            return Center(
-              child: Text(
-                'An error occurred while fetching data.',
-                style: TextStyle(color: Colors.red),
+            return Dialog(
+              backgroundColor: Colors.transparent,
+              child: Container(
+                width: double.infinity,
+                height: double.infinity,
+                padding: const EdgeInsets.all(16.0),
+                color: Colors.white,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'An error occurred while fetching data. Please try again.',
+                      style: TextStyle(color: Colors.red),
+                    ),
+                    const SizedBox(height: 16.0),
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.pop(context); // Dismiss the dialog
+                        Coordinator.of(context).push(
+                            RouteEntity.homeScreen()); // Navigate to HomeScreen
+                      },
+                      child: Text('Search again'),
+                    ),
+                  ],
+                ),
               ),
             );
           } else {
