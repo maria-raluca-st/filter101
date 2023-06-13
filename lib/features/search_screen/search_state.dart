@@ -6,6 +6,7 @@ class SearchState with _$SearchState {
   const factory SearchState.loading() = SearchLoadingState;
   const factory SearchState.loaded({
     List<RedditPost>? posts,
+    List<RedditComment>? comments,
     Map<String, double>? probabilities,
     Map<String, bool>? selectedCategories,
   }) = SearchLoadedState;

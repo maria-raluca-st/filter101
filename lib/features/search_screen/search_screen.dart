@@ -16,6 +16,7 @@ class SearchScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: SizedBox(),
         title: Text(
           'Prediction Results',
           style: TextStyles.heading(
@@ -33,11 +34,12 @@ class SearchScreen extends StatelessWidget {
         builder: (context, state) {
           if (state is SearchLoadingState) {
             return Center(
-                child: CircularProgressIndicator(
-              color: Colour.hunterGreen,
-              semanticsLabel: 'Loading',
-              strokeWidth: 6.0,
-            ));
+              child: CircularProgressIndicator(
+                color: Colour.hunterGreen,
+                semanticsLabel: 'Loading',
+                strokeWidth: 6.0,
+              ),
+            );
           } else if (state is SearchLoadedState) {
             final probabilities = state.probabilities;
             final selectedCategories = searchBloc.selectedCategories;
@@ -45,60 +47,108 @@ class SearchScreen extends StatelessWidget {
                 .where((category) => selectedCategories[category] == true)
                 .toList();
 
-            return ListView.builder(
-              itemCount: filteredCategories.length,
-              itemBuilder: (context, index) {
-                final category = filteredCategories[index];
-                final probability =
-                    probabilities![category]?.toStringAsFixed(2) ?? 'N/A';
-
-                return ListTile(
-                  title: Text(category),
-                  subtitle: Text('Probability: $probability'),
-                  onTap: () {
-                    // // Handle tile click
-                    Coordinator.of(context).push(RouteEntity.detailsScreen(
-                        category, searchBloc.processedPosts));
-
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //     builder: (context) => CategoryDetailsScreen(
-                    //       category: category,
-                    //       posts: searchBloc.processedPosts,
-                    //     ),
-                    //   ),
-                    // );
-                  },
-                );
-              },
+            return Column(
+              children: [
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: filteredCategories.length,
+                    itemBuilder: (context, index) {
+                      final category = filteredCategories[index];
+                      final probability =
+                          probabilities![category]?.toStringAsFixed(2) ?? 'N/A';
+                      return ListTile(
+                        // title: Text(category),
+                        title: Text(_getCategoryName(category),
+                            style: TextStyles.heading(color: Colour.black)),
+                        subtitle: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // Text('Probability: $probability'),
+                            SizedBox(height: 4.0),
+                            Row(
+                              children: [
+                                Text(
+                                  _getCategorySection(category) +
+                                      ': ' +
+                                      probability,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: _getCategoryColor(category),
+                                  ),
+                                ),
+                                // SizedBox(width: 100.0),
+                                Spacer(),
+                                Icon(Icons.arrow_forward_ios),
+                              ],
+                            ),
+                          ],
+                        ),
+                        onTap: () {
+                          Coordinator.of(context).push(
+                            RouteEntity.detailsScreen(
+                              category,
+                              searchBloc.processedPosts,
+                              searchBloc.processedComments,
+                            ),
+                          );
+                        },
+                      );
+                    },
+                  ),
+                ),
+                SizedBox(height: 32.0),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.5,
+                  height: 48.0,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Coordinator.of(context).push(RouteEntity.homeScreen());
+                    },
+                    style: ElevatedButton.styleFrom(
+                      primary: Colour.hunterGreen,
+                    ),
+                    child: Text(
+                      'Search again',
+                      style: TextStyles.body(color: Colour.white),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 16.0),
+                Text('OR',
+                    style: TextStyles.heading(color: Colour.hunterGreen)),
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 16.0, vertical: 8.0),
+                  child: Text(
+                    'You can now explore more in-depth each category by pressing the correct tile. This will lead to a few relevant examples of posts and comments from r/${searchBloc.subredditName}',
+                    textAlign: TextAlign.center,
+                    style: TextStyles.body(color: Colour.hunterGreen),
+                  ),
+                ),
+                SizedBox(height: 16.0)
+              ],
             );
           } else if (state is SearchErrorState) {
-            return Dialog(
-              backgroundColor: Colors.transparent,
-              child: Container(
-                width: double.infinity,
-                height: double.infinity,
-                padding: const EdgeInsets.all(16.0),
-                color: Colors.white,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'An error occurred while fetching data. Please try again.',
-                      style: TextStyle(color: Colors.red),
-                    ),
-                    const SizedBox(height: 16.0),
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.pop(context); // Dismiss the dialog
-                        Coordinator.of(context).push(
-                            RouteEntity.homeScreen()); // Navigate to HomeScreen
-                      },
-                      child: Text('Search again'),
-                    ),
-                  ],
-                ),
+            return Container(
+              color: Colors.white,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'An error occurred while fetching data. Please try again.',
+                    style: TextStyles.subheading(color: Colour.cordovan),
+                    textAlign: TextAlign.center,
+                  ),
+                  SizedBox(height: 16.0),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.pop(context); // Dismiss the dialog
+                      Coordinator.of(context).push(
+                          RouteEntity.homeScreen()); // Navigate to HomeScreen
+                    },
+                    child: Text('Search again'),
+                  ),
+                ],
               ),
             );
           } else {
@@ -107,5 +157,45 @@ class SearchScreen extends StatelessWidget {
         },
       ),
     );
+  }
+
+  String _getCategorySection(String category) {
+    if (category == 'hateSpeech' || category == 'sarcasmExcluding') {
+      return 'Probability of exclusion';
+    } else if (category == 'humor' ||
+        category == 'positiveContent' ||
+        category == 'sarcasmIncluding') {
+      return 'Probability of inclusion';
+    } else {
+      return '';
+    }
+  }
+
+  String _getCategoryName(String category) {
+    if (category == 'hateSpeech') {
+      return 'Hate Speech';
+    } else if (category == 'sarcasmExcluding')
+      return 'Excluding Sarcasm';
+    else if (category == 'humor')
+      return 'Humor';
+    else if (category == 'positiveContent')
+      return 'Positive Content';
+    else if (category == 'sarcasmIncluding') {
+      return 'Including Sarcasm';
+    } else {
+      return '';
+    }
+  }
+
+  Color _getCategoryColor(String category) {
+    if (category == 'hateSpeech' || category == 'sarcasmExcluding') {
+      return Colour.atomicTangerine;
+    } else if (category == 'humor' ||
+        category == 'positiveContent' ||
+        category == 'sarcasmIncluding') {
+      return Colour.hunterGreen;
+    } else {
+      return Colour.black;
+    }
   }
 }

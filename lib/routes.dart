@@ -5,6 +5,7 @@ import 'package:filter101/widgets/bottom_nav_bar.dart';
 import 'package:flutter/material.dart';
 
 import 'features/login/presentation/page/login_screen.dart';
+import 'features/no_internet/no_internet_screen.dart';
 import 'features/onboarding/presentation/page/onboarding.dart';
 import 'features/register/presentation/page/register_screen.dart';
 import 'features/search_screen/search_bloc.dart';
@@ -16,11 +17,16 @@ abstract class Routes {
   static const homeScreen = 'HOME_SCREEN';
   static const searchScreen = 'SEARCH_SCREEN';
   static const detailsScreen = 'DETAILS_SCREEN';
+  static const noInternetScreen = 'NO_INTERNET_SCREEN';
 }
 
 class RouteEntity {
   final String name;
   final Widget view;
+
+  RouteEntity.noInternetScreen()
+      : name = Routes.noInternetScreen,
+        view = const NoInternetScreen();
 
   RouteEntity.loginScreen()
       : name = Routes.loginScreen,
@@ -38,12 +44,10 @@ class RouteEntity {
       : name = Routes.homeScreen,
         view = const BottomNavigationScreen();
 
-  RouteEntity.detailsScreen(category, posts)
+  RouteEntity.detailsScreen(category, posts, comments)
       : name = Routes.detailsScreen,
         view = CategoryDetailsScreen(
-          category: category,
-          posts: posts,
-        );
+            category: category, posts: posts, comments: comments);
   // view = const HomePage();
   // RouteEntity.searchPage({required SearchBloc searchBloc})
   //     : name = Routes.searchScreen,

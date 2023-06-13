@@ -15,8 +15,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   final List<Map<String, String>> _pages = [
     {
       'image': 'assets/images/onboarding_1.jpg',
-      'title': 'We know how daunting the world of social media is.',
-      'description': ' And by association, the world of reddit.',
+      'title': 'We know how daunting the world of social media can be.',
+      'description':
+          ' We are here to help you navigate through it. Or at least, Reddit.',
     },
     {
       'image': 'assets/images/onboarding_2.jpg',
@@ -28,7 +29,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       'image': 'assets/images/onboarding_3.jpg',
       'title': 'How does it work?',
       'description':
-          'You can choose your preferred filters from our list, and we will do the rest for you. For any given subreddit, we will first filter out the posts that are not in English. And the rest... well, we will let you decide whether to continue browsing or not based on the predictions we make.',
+          'You can choose your preferred filters from our list and we will do the rest for you. For any given subreddit, containing english texts, we will predict the probability of the community containing the specfied subject. Keep in mind that our prediction times will correlate with the number of texts being analyzed. And the rest... well, we will let you decide whether to continue browsing or not based on the predictions we make.',
     },
   ];
 
@@ -56,7 +57,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                           page['image']!,
                           height: MediaQuery.of(context).size.height * 0.5,
                         ),
-                        const SizedBox(height: 48.0),
+                        const SizedBox(height: 30.0),
                         Text(
                           page['title']!,
                           style: TextStyles.heading(

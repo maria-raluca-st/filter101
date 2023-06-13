@@ -1,60 +1,146 @@
+import 'package:filter101/data/comment.dart';
 import 'package:filter101/data/post.dart';
 import 'package:flutter/material.dart';
 
-class CategoryDetailsScreen extends StatelessWidget {
+class CategoryDetailsScreen extends StatefulWidget {
   final String category;
   final List<RedditPost> posts;
+  final List<RedditComment> comments;
 
-  const CategoryDetailsScreen({required this.category, required this.posts});
+  const CategoryDetailsScreen({
+    required this.category,
+    required this.posts,
+    required this.comments,
+  });
+
+  @override
+  _CategoryDetailsScreenState createState() => _CategoryDetailsScreenState();
+}
+
+class _CategoryDetailsScreenState extends State<CategoryDetailsScreen> {
+  Set<String> displayedTexts = {}; // Set to track displayed texts
 
   @override
   Widget build(BuildContext context) {
-    // Sort the posts based on probabilities in descending order
+    // Filter posts and comments with non-zero probability
+    final filteredPosts = widget.posts.where((post) {
+      var postProbability = _getPostProbability(post);
+      return postProbability != 0.00;
+    }).toList();
 
-    if (category == 'hateSpeech') {
-      posts.sort((a, b) => (b.probabilityHateSpeech ?? 0)
-          .compareTo(a.probabilityHateSpeech ?? 0));
-    } else if (category == 'sarcasmExcluding') {
-      posts.sort((a, b) => (b.probabilitySarcasmExcluding ?? 0)
-          .compareTo(a.probabilitySarcasmExcluding ?? 0));
-    } else if (category == 'sarcasmIncluding') {
-      posts.sort((a, b) => (b.probabilitySarcasmIncluding ?? 0)
-          .compareTo(a.probabilitySarcasmIncluding ?? 0));
-    } else if (category == 'positiveContent') {
-      posts.sort((a, b) => (b.probabilityPositiveContent ?? 0)
-          .compareTo(a.probabilityPositiveContent ?? 0));
-    } else if (category == 'humor') {
-      posts.sort((a, b) =>
-          (b.probabilityHumor ?? 0).compareTo(a.probabilityHumor ?? 0));
-    }
+    final filteredComments = widget.comments.where((comment) {
+      var commentProbability = _getCommentProbability(comment);
+      return commentProbability != 0.00;
+    }).toList();
+
+    // Sort posts and comments in descending order based on probability
+    filteredPosts.sort((a, b) {
+      var aProbability = _getPostProbability(a);
+      var bProbability = _getPostProbability(b);
+      return bProbability.compareTo(aProbability);
+    });
+
+    filteredComments.sort((a, b) {
+      var aProbability = _getCommentProbability(a);
+      var bProbability = _getCommentProbability(b);
+      return bProbability.compareTo(aProbability);
+    });
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Category Details: $category'),
+        title: Text(_getCategoryName(widget.category)),
       ),
       body: ListView.builder(
-        itemCount: posts.length,
+        itemCount: filteredPosts.length,
         itemBuilder: (context, index) {
-          final post = posts[index];
-          var probability;
-          if (category == 'hateSpeech') {
-            probability = post.probabilityHateSpeech;
-          } else if (category == 'sarcasmExcluding') {
-            probability = post.probabilitySarcasmExcluding;
-          } else if (category == 'sarcasmIncluding') {
-            probability = post.probabilitySarcasmIncluding;
-          } else if (category == 'positiveContent') {
-            probability = post.probabilityPositiveContent;
-          } else if (category == 'humor') {
-            probability = post.probabilityHumor;
-          }
-          return ListTile(
-            title: Text(post.title),
-            subtitle: Text('Probability: ${probability.toStringAsFixed(2)}'),
-            // Add more details or customize the list tile as needed
+          final post = filteredPosts[index];
+          final postProbability = _getPostProbability(post);
+
+          return Column(
+            children: [
+              ListTile(
+                title: Text(post.title),
+                subtitle: Text(
+                  'Probability: ${postProbability.toStringAsFixed(2)}',
+                ),
+              ),
+              ListView.builder(
+                shrinkWrap: true,
+                physics: ClampingScrollPhysics(),
+                itemCount:
+                    filteredComments.length > 10 ? 10 : filteredComments.length,
+                itemBuilder: (context, commentIndex) {
+                  final comment = filteredComments[commentIndex];
+                  final commentProbability = _getCommentProbability(comment);
+
+                  if (displayedTexts.contains(comment.body)) {
+                    return Container(); // Skip duplicate text
+                  }
+
+                  displayedTexts.add(comment.body); // Add displayed text to set
+
+                  return ListTile(
+                    title: Text(comment.body),
+                    subtitle: Text(
+                      'Probability: ${commentProbability.toStringAsFixed(2)}',
+                    ),
+                  );
+                },
+              ),
+            ],
           );
         },
       ),
     );
+  }
+
+  double _getPostProbability(RedditPost post) {
+    switch (widget.category) {
+      case 'hateSpeech':
+        return post.probabilityHateSpeech ?? 0;
+      case 'sarcasmExcluding':
+        return post.probabilitySarcasmExcluding ?? 0;
+      case 'sarcasmIncluding':
+        return post.probabilitySarcasmIncluding ?? 0;
+      case 'positiveContent':
+        return post.probabilityPositiveContent ?? 0;
+      case 'humor':
+        return post.probabilityHumor ?? 0;
+      default:
+        return 0;
+    }
+  }
+
+  double _getCommentProbability(RedditComment comment) {
+    switch (widget.category) {
+      case 'hateSpeech':
+        return comment.probabilityHateSpeech ?? 0;
+      case 'sarcasmExcluding':
+        return comment.probabilitySarcasmExcluding ?? 0;
+      case 'sarcasmIncluding':
+        return comment.probabilitySarcasmIncluding ?? 0;
+      case 'positiveContent':
+        return comment.probabilityPositiveContent ?? 0;
+      case 'humor':
+        return comment.probabilityHumor ?? 0;
+      default:
+        return 0;
+    }
+  }
+
+  String _getCategoryName(String category) {
+    if (category == 'hateSpeech') {
+      return 'Hate Speech';
+    } else if (category == 'sarcasmExcluding')
+      return 'Excluding Sarcasm';
+    else if (category == 'humor')
+      return 'Humor';
+    else if (category == 'positiveContent')
+      return 'Positive Content';
+    else if (category == 'sarcasmIncluding') {
+      return 'Including Sarcasm';
+    } else {
+      return '';
+    }
   }
 }

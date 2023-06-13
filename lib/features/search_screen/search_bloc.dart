@@ -57,6 +57,8 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
 
   List<RedditPost> get processedPosts => _processedPosts;
   List<RedditPost> _processedPosts = [];
+  List<RedditComment> _processedComments = [];
+  List<RedditComment> get processedComments => _processedComments;
 
   Map<String, bool> get selectedCategories => Map.from(_selectedCategories);
   void _loadSelectedCategories() async {
@@ -128,10 +130,13 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
 
             // Classify comments
             for (var comment in comments) {
-              classifyContent(comment.body, categoryCounts, nrTextsAnalyzed);
+              classifyComment(comment, categoryCounts, nrTextsAnalyzed);
+              _processedComments.add(comment);
             }
           }
-          _processedPosts.add(post);
+          if (_processedPosts
+                  .any((inPost) => inPost.selfText == post.selfText) ==
+              false) _processedPosts.add(post);
         } catch (e) {
           print('Error fetching comments for post: $e');
           // You can handle the error here, such as logging it or displaying a message to the user
@@ -144,6 +149,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
       emit(SearchState.loaded(
         posts: _processedPosts,
         probabilities: probabilities,
+        comments: _processedComments,
       ));
     } catch (e) {
       print('Error fetching posts: $e');
@@ -372,6 +378,97 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
           categoryCounts['sarcasmIncluding'] =
               categoryCounts['sarcasmIncluding']! + 1;
           post.probabilitySarcasmIncluding = prediction[1].score;
+        }
+        predictedTextsTotal['sarcasmIncluding'] =
+            predictedTextsTotal['sarcasmIncluding']! + 1;
+      }
+    }
+  }
+
+  void classifyComment(RedditComment comment, Map<String, int> categoryCounts,
+      int nrTextsAnalyzed) async {
+    var prediction;
+    if (_selectedCategories['hateSpeech']! &&
+        predictedTextsTotal['hateSpeech']! < nrTextsAnalyzed) {
+      prediction = await _classifier.classify(comment.body, 'hate');
+      print(prediction);
+      if (prediction != null && prediction.length >= 2) {
+        if (prediction[1].score > prediction[0].score) {
+          categoryCounts['hateSpeech'] = categoryCounts['hateSpeech']! + 1;
+          comment.probabilityHateSpeech = prediction[1].score;
+        }
+        predictedTextsTotal['hateSpeech'] =
+            predictedTextsTotal['hateSpeech']! + 1;
+      }
+    }
+
+    if (_selectedCategories['negativeContent']! &&
+        predictedTextsTotal['negativeContent']! < nrTextsAnalyzed) {
+      prediction = await _classifier.classify(comment.body, 'emotion');
+      print(prediction);
+      if (prediction != null && prediction.length >= 2) {
+        if (prediction[1].score > prediction[0].score) {
+          categoryCounts['negativeContent'] =
+              categoryCounts['negativeContent']! + 1;
+        }
+        predictedTextsTotal['negativeContent'] =
+            predictedTextsTotal['negativeContent']! + 1;
+      }
+    }
+
+    if (_selectedCategories['humor']! &&
+        predictedTextsTotal['humor']! < nrTextsAnalyzed) {
+      prediction = await _classifier.classify(comment.body, 'humor');
+
+      print(prediction);
+      if (prediction != null && prediction.length >= 2) {
+        if (prediction[0].score > prediction[1].score) {
+          categoryCounts['humor'] = categoryCounts['humor']! + 1;
+          comment.probabilityHumor = prediction[0].score;
+        }
+        predictedTextsTotal['humor'] = predictedTextsTotal['humor']! + 1;
+      }
+    }
+
+    if (_selectedCategories['positiveContent']! &&
+        predictedTextsTotal['positiveContent']! < nrTextsAnalyzed) {
+      prediction = await _classifier.classify(comment.body, 'emotion');
+      print(prediction);
+      if (prediction != null && prediction.length >= 2) {
+        if (prediction[1].score > prediction[0].score) {
+          categoryCounts['positiveContent'] =
+              categoryCounts['positiveContent']! + 1;
+          comment.probabilityPositiveContent = prediction[1].score;
+        }
+        predictedTextsTotal['positiveContent'] =
+            predictedTextsTotal['positiveContent']! + 1;
+      }
+    }
+
+    if (_selectedCategories['sarcasmExcluding']! &&
+        predictedTextsTotal['sarcasmExcluding']! < nrTextsAnalyzed) {
+      prediction = await _classifier.classify(comment.body, 'sarcasm');
+      print(prediction);
+      if (prediction != null && prediction.length >= 2) {
+        if (prediction[0].score > prediction[1].score) {
+          categoryCounts['sarcasmExcluding'] =
+              categoryCounts['sarcasmExcluding']! + 1;
+          comment.probabilitySarcasmExcluding = prediction[0].score;
+        }
+        predictedTextsTotal['sarcasmExcluding'] =
+            predictedTextsTotal['sarcasmExcluding']! + 1;
+      }
+    }
+
+    if (_selectedCategories['sarcasmIncluding']! &&
+        predictedTextsTotal['sarcasmIncluding']! < nrTextsAnalyzed) {
+      prediction = await _classifier.classify(comment.body, 'sarcasm');
+      print(prediction);
+      if (prediction != null && prediction.length >= 2) {
+        if (prediction[1].score > prediction[0].score) {
+          categoryCounts['sarcasmIncluding'] =
+              categoryCounts['sarcasmIncluding']! + 1;
+          comment.probabilitySarcasmIncluding = prediction[1].score;
         }
         predictedTextsTotal['sarcasmIncluding'] =
             predictedTextsTotal['sarcasmIncluding']! + 1;

@@ -132,7 +132,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void _navigateToSignUp() {
     // Navigate to the signup screen
-    // For example, Navigator.push() to go to a signup screen
     Coordinator.of(context).push(RouteEntity.registerScreen());
   }
 

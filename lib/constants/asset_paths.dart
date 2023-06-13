@@ -1,12 +1,11 @@
 abstract class AssetPaths {
   //paths
   static const _iconpath = 'assets/png/';
-  static const _svgpath = 'assets/svg/';
+  static const _jpgpath = 'assets/images/';
 
   //png paths
   static const googleIcon = '${_iconpath}google_logo.png';
   static const appIcon = '${_iconpath}app_icon.png';
 
-  //svg paths
-  static const bwAppIconSVG = '${_svgpath}bw_app_icon.svg';
+  static const noInternet = '${_jpgpath}no_internet.jpg';
 }

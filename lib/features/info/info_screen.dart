@@ -23,7 +23,7 @@ class _OnboardingScreenState extends State<InfoScreen> {
       'image': 'assets/images/info_2.jpg',
       'title': 'Functionalities',
       'description':
-          'On the favorites page, you can save your preerred filters for the current session. Note that after you logout, the favorites list will be cleared. This ensures that you can start fresh for each login session.',
+          'On the favorites page, you can save your preferred filters for the current session. Note that after you logout, the favorites list will be cleared. This ensures that you can start fresh for each login session.',
     },
     {
       'image': 'assets/images/info_3.jpg',
@@ -101,7 +101,7 @@ class _OnboardingScreenState extends State<InfoScreen> {
                           primary: Colour.hunterGreen,
                         ),
                         child: Text(
-                          'Go to home page',
+                          'Explore a community',
                           style: TextStyles.body(color: Colour.white),
                         ),
                       ),

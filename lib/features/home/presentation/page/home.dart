@@ -389,7 +389,7 @@ class _HomePageContentState extends State<_HomePageContent> {
                           ),
                         ],
                       ),
-                      const SizedBox(height: 30),
+                      const SizedBox(height: 50),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 50),
                         child: SizedBox(

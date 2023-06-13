@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:filter101/constants/asset_paths.dart';
 import 'package:filter101/constants/colour.dart';
 import 'package:filter101/constants/variables.dart';
@@ -28,30 +29,34 @@ class StartState extends State<SplashScreen> {
   }
 
   startTimer() async {
-    const duration = Duration(seconds: 2);
+    const duration = Duration(seconds: 3);
     return Timer(duration, route);
   }
 
-  // route() {
-  //   Coordinator.of(context).push(RouteEntity.loginScreen());
-  // }
   route() async {
     final secureStorage = SecureStorage();
     final email = await secureStorage.getEmail();
     final password = await secureStorage.getPassword();
+    final connectivityResult = await (Connectivity().checkConnectivity());
 
-    if (email != null && password != null) {
-      // User is already logged in, navigate to the HomeScreen
-      Coordinator.of(context).push(RouteEntity.homeScreen());
-    } else {
+    if (connectivityResult == ConnectivityResult.wifi ||
+        connectivityResult == ConnectivityResult.mobile) {
+      if (email != null && password != null) {
+        // User is already logged in, navigate to the HomeScreen
+        Coordinator.of(context).push(RouteEntity.homeScreen());
+      }
       // User is not logged in, navigate to the LoginScreen
-      Coordinator.of(context).push(RouteEntity.loginScreen());
+      else
+        Coordinator.of(context).push(RouteEntity.loginScreen());
+    } else {
+      // no internet connection
+      Coordinator.of(context).push(RouteEntity.noInternetScreen());
     }
   }
 
   initScreen(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Colour.white,
       body: SizedBox(
         height: MediaQuery.of(context).size.height,
         child: Center(
