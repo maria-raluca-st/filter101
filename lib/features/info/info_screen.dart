@@ -17,7 +17,7 @@ class _OnboardingScreenState extends State<InfoScreen> {
       'image': 'assets/images/info_1.jpg',
       'title': 'About the app',
       'description':
-          ' On the home screen, you can choose your preferred filters from our list. After entering a community name, we will apply the Tensorflow models to get the predictions for you.',
+          ' On the home screen, you can choose your preferred filters from our list. After entering a community name, we will apply the Tensorflow models to get the predictions for you. For each category, you can see a sample of comments with the biggest scores.',
     },
     {
       'image': 'assets/images/info_2.jpg',

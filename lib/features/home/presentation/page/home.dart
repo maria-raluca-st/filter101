@@ -29,6 +29,7 @@ class _HomePageContentState extends State<_HomePageContent> {
 
   late bool hundredSelected;
   late bool twoHundredSelected;
+  late bool fiveHundredSelected;
   late bool thousandSelected;
 
   @override
@@ -38,6 +39,7 @@ class _HomePageContentState extends State<_HomePageContent> {
     hundredSelected = false;
     twoHundredSelected = true;
     thousandSelected = false;
+    fiveHundredSelected = false;
   }
 
   @override
@@ -337,6 +339,7 @@ class _HomePageContentState extends State<_HomePageContent> {
                                       hundredSelected = true;
                                       twoHundredSelected = false;
                                       thousandSelected = false;
+                                      fiveHundredSelected = false;
                                       searchBloc.nrTextsAnalyzed = 100;
                                     });
                                   },
@@ -354,6 +357,7 @@ class _HomePageContentState extends State<_HomePageContent> {
                                       hundredSelected = false;
                                       twoHundredSelected = true;
                                       thousandSelected = false;
+                                      fiveHundredSelected = false;
                                       searchBloc.nrTextsAnalyzed = 200;
                                     });
                                   },
@@ -370,7 +374,26 @@ class _HomePageContentState extends State<_HomePageContent> {
                                     setState(() {
                                       hundredSelected = false;
                                       twoHundredSelected = false;
+                                      thousandSelected = false;
+                                      fiveHundredSelected = true;
+                                      searchBloc.nrTextsAnalyzed = 500;
+                                    });
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    primary: fiveHundredSelected
+                                        ? Colour.hunterGreen
+                                        : Colour.ashGray,
+                                  ),
+                                  child: const Text('500'),
+                                ),
+                                const SizedBox(width: 16.0),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      hundredSelected = false;
+                                      twoHundredSelected = false;
                                       thousandSelected = true;
+                                      fiveHundredSelected = false;
                                       searchBloc.nrTextsAnalyzed = 1000;
                                     });
                                     // print('Sub Name: ${searchBloc.subredditName}');
