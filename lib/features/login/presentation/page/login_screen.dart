@@ -22,27 +22,6 @@ class _LoginScreenState extends State<LoginScreen> {
   GoogleSignInAccount? _googleSignInAccount;
   final SecureStorage _secureStorage = SecureStorage();
 
-  // Future<void> _login() async {
-  //   try {
-  //     UserCredential userCredential = await _auth.signInWithEmailAndPassword(
-  //       email: _emailController.text.trim(),
-  //       password: _passwordController.text.trim(),
-  //     );
-  //     // Save the user's credentials
-  //     await _secureStorage.saveCredentials(
-  //       _emailController.text.trim(),
-  //       _passwordController.text.trim(),
-  //     );
-  //     // Login successful, navigate to another screen
-
-  //     print('Login successful!');
-  //     Coordinator.of(context).push(RouteEntity.homeScreen());
-  //   } on FirebaseAuthException catch (e) {
-  //     // Handle login errors
-  //     print('Login failed. Error: ${e.message}');
-  //   }
-  // }
-
   Future<void> _login() async {
     try {
       UserCredential userCredential = await _auth.signInWithEmailAndPassword(

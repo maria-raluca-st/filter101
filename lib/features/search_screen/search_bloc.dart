@@ -17,7 +17,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
   final Classifier _classifier;
   String? _subredditName;
   int _nrTextsAnalyzed = 200;
-  final Map<String, bool> _selectedCategories = {
+  Map<String, bool> _selectedCategories = {
     'hateSpeech': false,
     'negativeContent': false,
     'humor': false,
@@ -61,12 +61,19 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
   List<RedditComment> get processedComments => _processedComments;
 
   Map<String, bool> get selectedCategories => Map.from(_selectedCategories);
+  set selectedCategories(Map<String, bool> value) {
+    _selectedCategories = Map.from(value);
+  }
+
   void _loadSelectedCategories() async {
     final SecureStorage _secureStorage = SecureStorage();
     final Map<String, bool>? storedCategories =
         await _secureStorage.getBoolMap();
     if (storedCategories != null) {
+      // _selectedCategories.clear();
       _selectedCategories.addAll(storedCategories);
+      // _selectedCategories = Map.from(storedCategories);
+
       print(_selectedCategories);
     }
   }
@@ -90,7 +97,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
   _mapFetchInitialDataEvent(Emitter<SearchState> emit) {
     emit(SearchState.loading());
 
-    _loadSelectedCategories();
+    // _loadSelectedCategories();
     emit(SearchState.loaded(
       selectedCategories: _selectedCategories,
     ));

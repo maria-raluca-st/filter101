@@ -79,7 +79,7 @@ class HomeTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const HomePage();
+    return HomePage();
   }
 }
 

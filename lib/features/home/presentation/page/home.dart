@@ -1,8 +1,7 @@
 import 'package:filter101/features/search_screen/search_bloc.dart';
-import 'package:filter101/widgets/bottom_nav_bar.dart';
+import 'package:filter101/network/secure_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import '../../../../constants/colour.dart';
 import '../../../../constants/text_style.dart';
 import '../../../search_screen/search_screen.dart';
@@ -32,6 +31,12 @@ class _HomePageContentState extends State<_HomePageContent> {
   late bool fiveHundredSelected;
   late bool thousandSelected;
 
+  // late bool isPositiveSelected;
+  // late bool isHumorSelected;
+  // late bool isSarcasmIncludingSelected;
+  // late bool isSarcasmExcludingSelected;
+  // late bool isHateSpeechSelected;
+
   @override
   void initState() {
     super.initState();
@@ -52,6 +57,15 @@ class _HomePageContentState extends State<_HomePageContent> {
   Widget build(BuildContext context) {
     final searchBloc = BlocProvider.of<SearchBloc>(context)
       ..add(FetchInitialDataEvent());
+    final bool isLoading = searchBloc.state is SearchLoadingState;
+    final bool hasError = searchBloc.state is SearchErrorState;
+    // isHateSpeechSelected = searchBloc.selectedCategories['hateSpeech']!;
+    // isHumorSelected = searchBloc.selectedCategories['humor']!;
+    // isPositiveSelected = searchBloc.selectedCategories['positiveContent']!;
+    // isSarcasmExcludingSelected =
+    //     searchBloc.selectedCategories['sarcasmExcluding']!;
+    // isSarcasmIncludingSelected =
+    //     searchBloc.selectedCategories['sarcasmIncluding']!;
 
     return BlocProvider.value(
         value: searchBloc,
@@ -147,10 +161,13 @@ class _HomePageContentState extends State<_HomePageContent> {
                                 ElevatedButton(
                                   onPressed: () {
                                     setState(() {
+                                      // isHateSpeechSelected =
+                                      //     !isHateSpeechSelected;
                                       searchBloc.add(
                                         SelectCategoryEvent(
                                           category: 'hateSpeech',
                                           selected:
+                                              // isHateSpeechSelected,
                                               !searchBloc.selectedCategories[
                                                   'hateSpeech']!,
                                         ),
@@ -160,10 +177,12 @@ class _HomePageContentState extends State<_HomePageContent> {
                                     });
                                   },
                                   style: ElevatedButton.styleFrom(
-                                    primary: searchBloc
-                                            .selectedCategories['hateSpeech']!
-                                        ? Colour.hunterGreen
-                                        : Colour.ashGray,
+                                    primary:
+                                        // isHateSpeechSelected
+                                        searchBloc.selectedCategories[
+                                                'hateSpeech']!
+                                            ? Colour.hunterGreen
+                                            : Colour.ashGray,
                                   ),
                                   child: const Text('Hate Speech'),
                                 ),
@@ -192,30 +211,6 @@ class _HomePageContentState extends State<_HomePageContent> {
                               ],
                             ),
                           ),
-                          // Center(
-                          //   child:
-                          // ElevatedButton(
-                          //   onPressed: () {
-                          //     setState(() {
-                          //       searchBloc.add(
-                          //         SelectCategoryEvent(
-                          //           category: 'negativeContent',
-                          //           selected:
-                          //               !searchBloc.selectedCategories[
-                          //                   'negativeContent']!,
-                          //         ),
-                          //       );
-                          //     });
-                          //   },
-                          //   style: ElevatedButton.styleFrom(
-                          //     primary: searchBloc.selectedCategories[
-                          //             'negativeContent']!
-                          //         ? Colour.hunterGreen
-                          //         : Colour.ashGray,
-                          //   ),
-                          //   child: const Text('Negative Content'),
-                          // ),
-                          // ),
                         ],
                       ),
                       const SizedBox(height: 20.0),

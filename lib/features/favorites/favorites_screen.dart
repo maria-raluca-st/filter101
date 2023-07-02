@@ -2,7 +2,6 @@ import 'package:filter101/constants/colour.dart';
 import 'package:filter101/constants/text_style.dart';
 import 'package:filter101/network/secure_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class FavoritesScreen extends StatefulWidget {
   @override
@@ -10,7 +9,6 @@ class FavoritesScreen extends StatefulWidget {
 }
 
 class _FavoritesScreenState extends State<FavoritesScreen> {
-  final SecureStorage _secureStorage = SecureStorage();
   final Map<String, String> categoryLabels = {
     'hateSpeech': 'Hate Speech',
     'negativeContent': 'Negative Content',

@@ -39,7 +39,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     if (email != null) {
       final imageUrl = await storage.getProfilePictureUrl(email);
 
-      if (imageUrl != null) {
+      if (imageUrl != null && mounted) {
         setState(() {
           _profilePictureUrl = imageUrl;
         });
